@@ -1,0 +1,541 @@
+<!doctype html>
+<html lang="sl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Uspešna Slovenija</title>
+<meta name="description" content="Pogledi na našo prihodnost – spletna publikacija SBC – Kluba slovenskih podjetnikov.">
+<!-- Predloga za skill uspesna-slovenija-splet. Vsebina v CLANKI/PISCI/IZDAJE je primer iz vzorca 1/2026 – zamenjaj jo. -->
+<style>
+/* Uspešna Slovenija – osnovni slog spletne publikacije (izluščeno iz »Vzorec B«, po Gregorjevem predlogu) — topel papir, Georgia v navadni debelini, tanke sive ločnice, temnozelen nadnaslov.
+   Ena svetla podoba; tipografija nosi stran, fotografije so samo na straneh prispevkov in pri piscih. */
+:root{
+  color-scheme: light;
+  --paper:#F7F4ED;
+  --ink:#202620;
+  --muted:#5C645B;
+  --rule:#C8C8BA;
+  --green:#314A35;
+  --wash:#E9EDE3;
+  --card:#FBFAF6;
+  --f-serif:Georgia, "Times New Roman", serif;
+  --f-sans:Arial, Helvetica, sans-serif;
+}
+*{box-sizing:border-box}
+body{background:var(--paper);color:var(--ink);font-family:var(--f-sans);font-size:16px;line-height:1.5}
+a{color:inherit;text-decoration:none}
+a:focus-visible,button:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid var(--green);outline-offset:3px}
+img{display:block;max-width:100%;height:auto}
+h1,h2,h3{font-family:var(--f-serif);font-weight:400;margin:0;text-wrap:balance}
+p{margin:0}
+.wrap{max-width:1040px;margin-inline:auto;padding-inline:34px}
+
+
+/* glava */
+.glava{padding-top:26px}
+.vrh{display:flex;align-items:center;justify-content:space-between;gap:18px;border-bottom:1px solid var(--rule);padding-bottom:14px}
+.vrh img{width:168px;height:auto}
+.vrh .desno{display:flex;align-items:center;gap:22px}
+.opis{font-size:11px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);text-align:right}
+.prijava-povezava{font-size:12px;font-weight:700;color:var(--green);border-bottom:1px solid currentColor;padding-bottom:1px;white-space:nowrap}
+.naslov{display:block;font-family:var(--f-serif);font-size:clamp(40px,6.4vw,68px);line-height:1.05;letter-spacing:-.045em;margin:30px 0 13px;width:fit-content}
+.obljuba{font-size:15px;line-height:1.5;color:var(--muted);margin-bottom:25px}
+nav.teme ul{list-style:none;margin:0;padding:12px 0;display:flex;gap:13px 22px;flex-wrap:wrap;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);font-size:12px;color:var(--muted)}
+nav.teme a{padding-block:2px;border-bottom:1px solid transparent}
+nav.teme a:hover{color:var(--ink)}
+nav.teme a[aria-current="page"]{color:var(--ink);font-weight:700}
+nav.teme a.pisci{color:var(--ink)}
+nav.teme a.pisci[aria-current="page"]{border-bottom-color:var(--ink)}
+
+/* skupni deli */
+main{padding-block:0 56px}
+.kicker{font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:var(--green);line-height:1.45;margin-bottom:13px;display:block}
+.byline{font-size:13px;font-weight:700;line-height:1.4}
+.byline span{font-weight:400;color:var(--muted)}
+.intro{font-family:var(--f-serif);font-size:17px;line-height:1.65;color:var(--muted)}
+h3 a:hover,h2 a:hover{text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:5px;text-decoration-color:var(--rule)}
+
+/* naslovnica */
+.lead{display:grid;grid-template-columns:minmax(0,1.75fr) minmax(0,1fr);gap:32px;padding:29px 0 27px;align-items:end}
+.lead h2{font-size:clamp(28px,3.9vw,42px);line-height:1.12;letter-spacing:-.025em;margin-bottom:19px}
+.lead-slika{margin:26px 0 0}
+.lead-slika img{width:100%;aspect-ratio:21/9;object-fit:cover}
+a.slika{display:block;margin-bottom:16px;overflow:hidden}
+a.slika img{width:100%;aspect-ratio:16/10;object-fit:cover;transition:transform .5s ease}
+a.slika:hover img{transform:scale(1.02)}
+.lead-slika img,a.slika img,.clanek figure img{filter:saturate(.82) contrast(1.02)}
+@media (prefers-reduced-motion: reduce){a.slika img{transition:none}}
+.par{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:28px;border-top:1px solid var(--rule);padding-top:25px}
+.par article+article{border-left:1px solid var(--rule);padding-left:28px}
+.par h3{font-size:25px;line-height:1.18;letter-spacing:-.02em;margin-bottom:16px}
+.par .byline{font-size:12px}
+.datum-izdaje{font-size:12px;color:var(--muted);padding-top:22px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+
+.misel{margin-top:44px;padding:34px 0;border-top:1px solid var(--ink);border-bottom:1px solid var(--rule);display:grid;grid-template-columns:minmax(0,1fr) 220px;gap:32px;align-items:end}
+.misel p:first-child{font-family:var(--f-serif);font-size:clamp(25px,3.3vw,36px);line-height:1.22;letter-spacing:-.02em;text-wrap:balance}
+.misel .byline{text-align:right}
+.misel .byline a{display:block;margin-top:6px;font-weight:400;color:var(--green);border-bottom:1px solid currentColor;width:fit-content;margin-left:auto}
+
+.razdelek{display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin:46px 0 0;padding-bottom:12px;border-bottom:1px solid var(--rule)}
+.razdelek h2{font-size:24px;letter-spacing:-.02em}
+.razdelek p{font-size:13px;color:var(--muted);max-width:52ch;text-align:right}
+.trojec{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;padding-top:24px}
+.trojec article{padding-inline:26px;display:flex;flex-direction:column}
+.trojec article:first-child{padding-left:0}
+.trojec article:last-child{padding-right:0}
+.trojec article+article{border-left:1px solid var(--rule)}
+.trojec h3{font-size:22px;line-height:1.22;letter-spacing:-.015em;margin-bottom:12px}
+.trojec .intro{font-size:15px;line-height:1.6;margin-bottom:14px}
+.trojec .byline{margin-top:auto;font-size:12px}
+
+.pisci-trak{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px 28px;padding-top:22px}
+.pisci-trak a{display:grid;grid-template-columns:52px minmax(0,1fr);gap:14px;align-items:center}
+.pisci-trak b{display:block;font-family:var(--f-serif);font-weight:400;font-size:18px;line-height:1.25}
+.pisci-trak small{display:block;font-size:12px;color:var(--muted);margin-top:2px}
+.pisci-trak a:hover b{text-decoration:underline;text-underline-offset:4px;text-decoration-color:var(--rule)}
+.obraz{width:52px;height:52px;border-radius:50%;object-fit:cover;filter:grayscale(1) contrast(1.05)}
+.monogram{width:52px;height:52px;border-radius:50%;background:var(--wash);color:var(--green);display:grid;place-items:center;font-family:var(--f-serif);font-size:18px;letter-spacing:.02em}
+
+.noga-naslovnice{margin-top:46px;padding:22px 24px;background:var(--wash);display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:24px;align-items:center}
+.noga-naslovnice strong{font-family:var(--f-serif);font-size:22px;font-weight:400;display:block}
+.noga-naslovnice span{font-size:13px;color:var(--muted);display:block;margin-top:4px;line-height:1.5}
+.noga-naslovnice form{display:flex;flex-wrap:wrap}
+.noga-naslovnice input{flex:1 1 180px;min-width:0;font:15px var(--f-sans);padding:12px 13px;border:1px solid var(--rule);border-right:0;background:var(--card);color:var(--ink);border-radius:0}
+.gumb{font:700 12px/1 var(--f-sans);letter-spacing:.1em;text-transform:uppercase;background:var(--green);color:#F1EEE7;border:1px solid var(--green);padding:12px 16px;cursor:pointer;border-radius:0}
+.gumb:hover{background:var(--ink);border-color:var(--ink)}
+.gumb.obroba{background:transparent;color:var(--ink);border-color:var(--rule);padding:9px 12px;font-size:11px}
+.gumb.obroba:hover{border-color:var(--ink);background:transparent}
+.odziv{flex-basis:100%;font-size:13px;color:var(--green);margin-top:8px;min-height:1em}
+
+/* članek */
+.clanek{max-width:720px;margin-inline:auto;padding-top:38px}
+.clanek h1{font-size:clamp(34px,5vw,52px);line-height:1.08;letter-spacing:-.035em;margin-bottom:20px}
+.clanek .intro{font-size:20px;line-height:1.55}
+.clanek .podpis{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:14px;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);padding-block:13px;margin-top:24px}
+.clanek .podpis>a{display:flex;align-items:center;gap:12px}
+.clanek .podpis time{display:block;font-size:12px;color:var(--muted);font-weight:400;margin-top:2px}
+.clanek figure{margin:26px 0 0}
+figcaption{font-size:11px;color:var(--muted);margin-top:7px}
+.besedilo{font-family:var(--f-serif);font-size:19px;line-height:1.72;margin-top:30px;display:flex;flex-direction:column;gap:22px}
+.besedilo h2{font-size:26px;letter-spacing:-.02em;margin-top:10px}
+.besedilo blockquote{margin:8px 0;padding:4px 0 4px 24px;border-left:2px solid var(--green)}
+.besedilo blockquote p{font-size:clamp(23px,2.8vw,28px);line-height:1.32;letter-spacing:-.015em;color:var(--green)}
+.opomba{font-family:var(--f-sans);font-size:13px;line-height:1.55;color:var(--muted);background:var(--wash);padding:13px 16px}
+.manjka{font-family:var(--f-sans);border:1px dashed var(--rule);padding:26px 24px;display:flex;flex-direction:column;gap:8px;background:var(--card)}
+.manjka b{font-family:var(--f-serif);font-weight:400;font-size:22px}
+.manjka span{font-size:14px;line-height:1.55;color:var(--muted)}
+.model{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border-top:1px solid var(--ink);border-bottom:1px solid var(--rule);font-family:var(--f-sans)}
+.model div{padding:15px 16px 17px}
+.model div+div{border-left:1px solid var(--rule)}
+.model b{display:block;font-family:var(--f-serif);font-weight:400;font-size:25px;margin-bottom:5px}
+.model span{font-size:14px;line-height:1.45;color:var(--muted)}
+.podatki{font-family:var(--f-sans);border-top:1px solid var(--ink)}
+.podatki div{display:grid;grid-template-columns:110px minmax(0,1fr);gap:16px;align-items:baseline;padding-block:11px;border-bottom:1px solid var(--rule)}
+.podatki dt{font-family:var(--f-serif);font-size:28px;line-height:1;font-variant-numeric:tabular-nums;white-space:nowrap}
+.podatki dd{margin:0;font-size:14px;color:var(--muted)}
+.podatki dl{margin:0}
+.podatki small{display:block;font-size:11px;color:var(--muted);margin-top:8px}
+.vprasanja{margin-top:44px;border-top:1px solid var(--ink)}
+.vprasanja>h2{font:700 11px/1 var(--f-sans);letter-spacing:.14em;text-transform:uppercase;color:var(--green);padding-block:16px 4px}
+.vprasanja details{border-bottom:1px solid var(--rule)}
+.vprasanja summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;gap:16px;padding-block:15px;font-family:var(--f-serif);font-size:20px;line-height:1.3}
+.vprasanja summary::-webkit-details-marker{display:none}
+.vprasanja summary::after{content:"+";font-family:var(--f-sans);color:var(--muted)}
+.vprasanja details[open] summary::after{content:"−"}
+.vprasanja details p{font-size:16px;line-height:1.65;color:var(--muted);padding-bottom:18px}
+.o-avtorju{margin-top:40px;display:grid;grid-template-columns:72px minmax(0,1fr);gap:18px;padding:20px;background:var(--wash)}
+.o-avtorju .obraz,.o-avtorju .monogram{width:72px;height:72px;font-size:24px}
+.o-avtorju h3{font-size:21px}
+.o-avtorju p{font-size:14px;line-height:1.55;color:var(--muted);margin-top:5px}
+.o-avtorju a.vec{display:inline-block;margin-top:10px;font-size:13px;font-weight:700;color:var(--green)}
+.se{margin-top:20px}
+
+/* seznami */
+.glava-strani{padding:38px 0 20px;border-bottom:1px solid var(--ink)}
+.glava-strani h1{font-size:clamp(38px,5.4vw,56px);letter-spacing:-.04em;line-height:1.05}
+.glava-strani p{font-size:16px;line-height:1.55;color:var(--muted);margin-top:12px;max-width:60ch}
+.seznam article{display:grid;grid-template-columns:150px minmax(0,1fr) 220px;gap:28px;padding-block:24px;border-bottom:1px solid var(--rule)}
+.seznam a.slika{margin:0}
+.seznam .kdaj{font-size:12px;color:var(--muted);line-height:1.5}
+.seznam h3{font-size:27px;line-height:1.16;letter-spacing:-.02em;margin-bottom:10px}
+.seznam .intro{font-size:16px;margin-bottom:10px}
+.prazno{font-size:14px;color:var(--muted);padding-block:22px}
+.izdaja{display:grid;grid-template-columns:150px minmax(0,1fr);gap:28px;padding-block:26px;border-bottom:1px solid var(--rule)}
+.izdaja h2{font-size:24px}
+.izdaja time{display:block;font-size:12px;color:var(--muted);margin-top:6px}
+.izdaja ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:16px}
+.izdaja li a{font-family:var(--f-serif);font-size:21px;line-height:1.25;display:block;margin-bottom:4px}
+.izdaja li a:hover{text-decoration:underline;text-underline-offset:4px;text-decoration-color:var(--rule)}
+.mreza{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0}
+.pisec{padding:26px 26px 28px;border-bottom:1px solid var(--rule);display:flex;flex-direction:column;gap:10px}
+.pisec:nth-child(3n+1){padding-left:0}
+.pisec:nth-child(3n){padding-right:0}
+.pisec:not(:nth-child(3n+1)){border-left:1px solid var(--rule)}
+.pisec .obraz,.pisec .monogram{width:84px;height:84px;font-size:28px}
+.pisec h2{font-size:24px;letter-spacing:-.02em}
+.pisec .vloga{font-size:13px;color:var(--muted);line-height:1.45}
+.pisec ul{list-style:none;margin:6px 0 0;padding:12px 0 0;border-top:1px solid var(--rule);display:flex;flex-direction:column;gap:9px}
+.pisec li a{font-family:var(--f-serif);font-size:17px;line-height:1.3}
+.pisec li a:hover{text-decoration:underline;text-underline-offset:4px;text-decoration-color:var(--rule)}
+.pisec li small{display:block;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--green);font-weight:700;margin-top:3px}
+
+/* noga */
+footer{border-top:1px solid var(--rule);padding-block:26px 34px}
+.noga{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;align-items:flex-start}
+.noga img{width:130px;height:auto}
+.noga p{font-size:12px;line-height:1.6;color:var(--muted);max-width:46ch;margin-top:10px}
+.noga ul{list-style:none;margin:0;padding:0;display:flex;gap:8px 20px;flex-wrap:wrap;font-size:12px}
+.noga ul a:hover{text-decoration:underline}
+.kljucni{display:flex;gap:10px 26px;flex-wrap:wrap;margin-top:20px;padding-top:14px;border-top:1px solid var(--rule);font-size:12px;color:var(--muted)}
+.kljucni b{font-family:var(--f-serif);font-weight:400;font-size:17px;color:var(--ink);margin-right:5px}
+
+/* partner */
+.partner-glava{display:flex;justify-content:flex-end;align-items:center;gap:12px;padding-top:10px;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.logo-mesto{display:inline-grid;place-items:center;width:132px;height:34px;border:1px dashed var(--rule);background:var(--card);font-size:10px;letter-spacing:.08em;color:var(--muted);text-transform:none}
+.oglas{margin-top:40px;display:flex;flex-direction:column;gap:6px}
+.oglas .oznaka{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.oglas .ploskev{width:100%;max-width:970px;margin-inline:auto;aspect-ratio:970/250;border:1px dashed var(--rule);background:var(--card);display:grid;place-items:center;text-align:center;padding:16px}
+.oglas .ploskev b{display:block;font-family:var(--f-serif);font-weight:400;font-size:clamp(18px,2.4vw,26px);color:var(--ink)}
+.oglas .ploskev span{display:block;font-size:12px;color:var(--muted);margin-top:6px}
+.omogoca{margin-top:22px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);padding-block:14px}
+.omogoca p{font-size:13px;line-height:1.5;color:var(--muted);max-width:44ch}
+.omogoca p b{display:block;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink);margin-bottom:3px}
+@media (max-width: 760px){ .oglas .ploskev{aspect-ratio:320/100} .partner-glava{justify-content:flex-start} }
+
+@media (max-width: 760px){
+  .wrap{padding-inline:20px}
+  .vrh img{width:145px}
+  .opis{max-width:115px}
+  .prijava-povezava{display:none}
+  .lead,.misel,.noga-naslovnice{grid-template-columns:minmax(0,1fr);gap:19px}
+  .misel .byline{text-align:left}.misel .byline a{margin-left:0}
+  .par,.trojec,.pisci-trak,.mreza{grid-template-columns:minmax(0,1fr)}
+  .par article+article,.trojec article+article{border-left:0;border-top:1px solid var(--rule);padding:22px 0 0;margin-top:22px}
+  .trojec article{padding-inline:0}
+  .pisec{padding-inline:0!important;border-left:0!important}
+  .razdelek{flex-direction:column;gap:6px}.razdelek p{text-align:left}
+  .seznam article,.izdaja{grid-template-columns:minmax(0,1fr);gap:8px}
+  .seznam a.slika{order:-1;margin-bottom:8px}
+  .lead-slika img{aspect-ratio:16/10}
+  .model{grid-template-columns:minmax(0,1fr)}.model div+div{border-left:0;border-top:1px solid var(--rule)}
+  .besedilo{font-size:18px}
+  nav.teme ul{gap:10px 16px}
+}
+
+/* nadomestilo za logotip, dokler datoteka ni na voljo */
+.znamka{display:block;font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;max-width:180px;line-height:1.35}
+</style>
+</head>
+<body>
+
+<header class="glava">
+  <div class="wrap">
+    <div class="vrh">
+      <a href="https://sbc.si" target="_blank" rel="noopener"><span class="znamka">SBC – Klub slovenskih podjetnikov</span><!-- ko je logotip na voljo: <img src="img/sbc-logo.svg" alt="SBC – Klub slovenskih podjetnikov" width="168" height="49"> --></a>
+      <div class="desno"><span class="opis">Pogledi na našo prihodnost</span><a class="prijava-povezava" href="#novicnik">Prijava</a></div>
+    </div>
+    <a class="naslov" href="#">Uspešna Slovenija.</a>
+    <p class="obljuba">Ideje za državo, v kateri želimo ustvarjati, delati in živeti.</p>
+    <nav class="teme" aria-label="Teme">
+      <ul id="meni">
+        <li><a href="#" data-pot="">V ospredju</a></li>
+        <li><a href="#gospodarstvo" data-pot="gospodarstvo">Gospodarstvo</a></li>
+        <li><a href="#drzava" data-pot="drzava">Država</a></li>
+        <li><a href="#tehnologija" data-pot="tehnologija">Tehnologija</a></li>
+        <li><a href="#zdravstvo" data-pot="zdravstvo">Zdravstvo</a></li>
+        <li><a href="#ljudje" data-pot="ljudje">Ljudje</a></li>
+        <li><a href="#arhiv" data-pot="arhiv">Arhiv</a></li>
+        <li><a class="pisci" href="#pisci" data-pot="pisci">Pisci</a></li>
+      </ul>
+    </nav>
+    <div class="partner-glava">Publikacijo omogoča <span class="logo-mesto">logotip partnerja</span></div>
+  </div>
+</header>
+
+<main class="wrap" id="vsebina"></main>
+
+<footer>
+  <div class="wrap">
+    <div class="noga">
+      <div>
+        <span class="znamka">SBC – Klub slovenskih podjetnikov</span>
+        <p>Uspešna Slovenija je publikacija SBC – Kluba slovenskih podjetnikov. Avtorji pišejo v svojem imenu.</p>
+      </div>
+      <ul>
+        <li><a href="#pisci">Pisci</a></li>
+        <li><a href="#arhiv">Arhiv</a></li>
+        <li><a href="#novicnik">Prijava na novičnik</a></li>
+        <li><a href="https://sbc.si" target="_blank" rel="noopener">sbc.si</a></li>
+      </ul>
+    </div>
+    <div class="kljucni">
+      <span><b>412</b>uspešnih podjetij</span>
+      <span><b>23.000+</b>delovnih mest</span>
+      <span><b>3,1 mrd €</b>skupnega kapitala</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+const TEME = {
+  gospodarstvo: { ime: "Gospodarstvo", opis: "Rast, produktivnost in konkurenčnost slovenskih podjetij." },
+  drzava: { ime: "Država", opis: "Davki, uprava, solidarnost in odločitve, ki jih bo morala sprejeti država." },
+  tehnologija: { ime: "Tehnologija", opis: "Tehnološki prelom, znanje in kapital: kje lahko slovenska podjetja zmagajo." },
+  zdravstvo: { ime: "Zdravstvo", opis: "Kako naj deluje zdravstvo, ki je dostopno, učinkovito in vzdržno." },
+  ljudje: { ime: "Ljudje", opis: "Vzgoja, šola, kadri in generacija, ki bo Slovenijo vodila naprej." }
+};
+
+const IZDAJE = {
+  nova: { ime: "Aktualna številka", datum: "[datum izida]", iso: "" },
+  "1-2026": { ime: "Številka 1/2026", datum: "29. 8. 2026", iso: "2026-08-29" }
+};
+
+const PISCI = {
+  zakrajsek: { ime: "dr. Egon Zakrajšek", vloga: "[kratka predstavitev avtorja]", inicialke: "EZ" },
+  dosenovic: { ime: "dr. Petra Došenović Bonča", vloga: "[kratka predstavitev avtorice]", inicialke: "PDB" },
+  femc: { ime: "Marko Femc", vloga: "[kratka predstavitev avtorja]", inicialke: "MF" },
+  bitenc: { ime: "dr. Marko Bitenc", vloga: "Predsednik SBC – Kluba slovenskih podjetnikov; torakalni kirurg, lastnik Kirurgije Bitenc", foto: "img/bitenc-krog.jpg" },
+  kristovic: { ime: "prof. dr. Sebastjan Kristovič", vloga: "Prorektor za izobraževanje, Univerza Alma Mater Europaea", foto: "img/kristovic-krog.jpg" },
+  burger: { ime: "dr. Anže Burger", vloga: "Izredni profesor, Fakulteta za družbene vede", foto: "img/burger-krog.jpg" }
+};
+
+const CLANKI = {
+  "tehnoloski-prelom": {
+    izdaja: "nova", tema: "tehnologija", kicker: "Strateški pogled", pisec: "zakrajsek",
+    naslov: "Če Slovenija zamudi tehnološki prelom, lahko izpade iz igre",
+    intro: "Tehnologija, kapital in znanje odločajo o tem, ali bodo slovenska podjetja ohranila svoje mesto v globalnih dobavnih verigah.",
+    slika: "img/b-tehnologija.jpg", foto: "Ilustracija: AI"
+  },
+  "zdravstvo-prihodnosti": {
+    izdaja: "nova", tema: "zdravstvo", kicker: "Zdravstvo", pisec: "dosenovic",
+    naslov: "Slovensko zdravstvo prihodnosti: učinkovita koordinacija in odgovorno odločanje",
+    slika: "img/b-zdravstvo.jpg", foto: "Ilustracija: AI"
+  },
+  "nehajmo-iskati-razloge": {
+    izdaja: "nova", tema: "tehnologija", kicker: "Tehnološki preboj", pisec: "femc",
+    naslov: "Nehajmo iskati razloge, zakaj pri nas nečesa ne moremo",
+    slika: "img/b-delavnica.jpg", foto: "Ilustracija: AI"
+  },
+  "cim-vec-bogatih": {
+    izdaja: "1-2026", tema: "drzava", kicker: "Kolumna", pisec: "bitenc",
+    naslov: "Čim več bogatih in niti enega reveža",
+    intro: "Ko slovenski športnik zasluži prvi milijon, smo ponosni. Ko premoženje ustvari podjetnik, se prepogosto najprej vprašamo, kaj je naredil narobe.",
+    slika: "img/bitenc-pas.jpg", foto: "Foto: Matic Klanšek Velej/Sportida",
+    besedilo: [
+      ["p", "Socialna država ne živi od namenov. Živi od tega, kar je nekdo najprej ustvaril, izdelal in prodal. Davki od dobička, prispevki od plač in DDV ne nastanejo sami."],
+      ["q", "Socialna država ne živi od dobrih namenov, ampak od ustvarjene vrednosti."],
+      ["p", "Bogata družba ni peščica milijonarjev. So podjetniki, ki vlagajo, ljudje z dobrimi plačami, družine z varnostjo in mladi, ki jim ni treba oditi."],
+      ["h", "Kapital ali solidarnost?"],
+      ["p", "Napačno vprašanje. Brez kapitala ni naložb, brez naložb ni razvoja in brez razvoja zmanjka denarja za solidarnost. Tudi dolg ne more nadomestiti močnega gospodarstva."],
+      ["q", "Dolg ni razvojni model in ne more nadomestiti močnega gospodarstva."],
+      ["p", "Pravo vprašanje ni, kako preprečiti, da bi nekateri postali bogati. Vprašanje je, kako omogočiti, da bo uspešnih čim več, in da zaradi tega nihče ne ostane reven."],
+      ["q", "Naš cilj ne sme biti družba, v kateri nihče nima veliko. Cilj mora biti družba, v kateri lahko vsakdo razvije svoje sposobnosti, pošteno uspe in dostojno živi."]
+    ],
+    vprasanja: [
+      ["Zakaj naj bi si družba želela več bogatih ljudi?", "Ker socialna država ne živi od dobrih namenov, ampak od ustvarjene vrednosti. Davki od dobička, prispevki od plač in DDV nastanejo šele, ko nekdo nekaj ustvari in proda."],
+      ["Ali sta kapital in solidarnost nasprotujoča si cilja?", "Ne. Brez kapitala ni naložb, brez naložb ni razvoja in brez razvoja zmanjka denarja za solidarnost."],
+      ["Je SBC političen?", "»SBC – Klub slovenskih podjetnikov je politično nevtralen, ni pa apolitičen.« Podpira ukrepe, ki izboljšujejo pogoje za delo in razvoj, ne glede na predlagatelja."]
+    ]
+  },
+  "ne-vzgajajmo-gledalcev": {
+    izdaja: "1-2026", tema: "ljudje", kicker: "Esej", pisec: "kristovic",
+    naslov: "Ne vzgajajmo in izobražujmo gledalcev, ampak ustvarjalce",
+    intro: "Talent ni končni izdelek, ampak možnost. Zakaj mladim ne naredimo usluge, če jim odstranimo vse ovire.",
+    slika: "img/kristovic-pas.jpg", foto: "Foto: [avtor fotografije]",
+    besedilo: [
+      ["p", "Otrokom želimo omogočiti skoraj vse. Hkrati jim prepogosto vzamemo prav tisto, kar najbolj potrebujejo: izkušnjo napora, odgovornosti in vztrajanja."],
+      ["q", "Talent ni končni izdelek. Talent je možnost."],
+      ["p", "Sposobnost postane šele z delom, disciplino, neuspehi in ponovnim vstajanjem. Gre za mladega človeka, ki zna vztrajati; za učitelja, ki v njem vidi človeka in ne letnika; in za podjetje, ki potrebuje ljudi, sposobne reševati probleme, za katere danes še ne vemo, da bodo obstajali."],
+      ["h", "Glava, srce in roka"],
+      ["model"],
+      ["q", "Problem nastane, ko orodje začne uporabljati človeka namesto človek orodja."],
+      ["p", "Mladim ne naredimo usluge, če jim odstranjujemo vse ovire. Na življenje se ne pripravimo tako, da se življenju izognemo."],
+      ["q", "Prihodnost se ne začne jutri. Prihodnost sedi danes v naših učilnicah."]
+    ],
+    vprasanja: [
+      ["Kaj pomeni »glava, srce in roka« v vzgoji?", "Glava je znanje, kritična presoja in ustvarjalnost; srce odnos, empatija in odgovornost; roka delo, dejanje in vztrajanje."],
+      ["Zakaj otroku ne koristi, če mu odstranimo vse ovire?", "Ker mu s tem vzamemo priložnost, da spozna, česa je sposoben. Talent postane sposobnost šele z delom, disciplino, neuspehi in ponovnim vstajanjem."]
+    ]
+  },
+  "baltske-drzave": {
+    izdaja: "1-2026", tema: "gospodarstvo", kicker: "Pogovor", pisec: "burger",
+    naslov: "Baltske in druge tranzicijske države so nam pokazale, kaj se da narediti",
+    intro: "Rast imamo, konkurenčnost izgubljamo. Ekonomist dr. Anže Burger o produktivnosti pod 90 % povprečja EU in 49. mestu med 70 gospodarstvi.",
+    slika: "img/burger-pas.jpg", foto: "Foto: Barbara Reya",
+    besedilo: [
+      ["p", "Gospodarstvo raste 5-odstotno, brezposelnih je le nekaj čez 40.000. Hkrati smo po konkurenčnosti na 49. mestu med 70 gospodarstvi."],
+      ["podatki"],
+      ["q", "… prehitele so nas tudi manj razvite tranzicijske države, recimo Estonija, Češka, tudi Poljska je že pred nami."],
+      ["h", "Ostane en vzvod"],
+      ["p", "Rezerve pri zaposlenosti so porabljene. Edini vzvod, ki ostane, je produktivnost, ta pa stagnira pod 90 % povprečja EU. Plače lahko rastejo le toliko, kolikor raste ustvarjena vrednost."],
+      ["q", "Slovenija premalo dela na strukturnih ukrepih in torej ne moremo računati, da bi ta pospešek trajal dolgo."],
+      ["p", "Visoka rast ni dokaz, da je vse v redu. Baltske države so pokazale, da se da, in da za to ni treba žrtvovati kakovosti življenja in socialne zaščite."]
+    ],
+    vprasanja: [
+      ["Zakaj je produktivnost ključna?", "Ker so rezerve pri zaposlenosti porabljene, prebivalstvo pa se stara. Produktivnost je edini vzvod, ki lahko ohrani raven blaginje; danes je pod 90 % povprečja EU."],
+      ["Kaj so naredile baltske države drugače?", "Izpeljale so razvojno politiko in je niso opustile ob prvih ovirah; rezultati so se pokazali v petih do desetih letih."]
+    ]
+  }
+};
+const VRSTNI_RED = Object.keys(CLANKI);
+const NOVI = VRSTNI_RED.filter(k => CLANKI[k].izdaja === "nova");
+const IZBOR = VRSTNI_RED.filter(k => CLANKI[k].izdaja === "1-2026");
+const $ = s => document.querySelector(s);
+
+const obraz = (id, cls = "obraz") => {
+  const p = PISCI[id];
+  return p.foto ? `<img class="${cls}" src="${p.foto}" alt="" width="52" height="52" loading="lazy">` : `<span class="monogram" aria-hidden="true">${p.inicialke}</span>`;
+};
+const kicker = c => `<a class="kicker" href="#${c.tema}">${c.kicker}</a>`;
+const kdaj = c => IZDAJE[c.izdaja].datum;
+const prispevki = n => n + " " + (n % 100 === 1 ? "prispevek" : n % 100 === 2 ? "prispevka" : (n % 100 === 3 || n % 100 === 4) ? "prispevki" : "prispevkov");
+
+function podatki(){
+  const v = [["5 %","rast BDP v 2. četrtletju, medletno"],["40.000","brezposelnih"],["< 90 %","povprečja EU pri produktivnosti"],["10 %","BDP gre za pokojnine"],["49.","mesto med 70 gospodarstvi (IMD)"]];
+  return `<div class="podatki"><dl>${v.map(([a,b]) => `<div><dt>${a}</dt><dd>${b}</dd></div>`).join("")}</dl><small>Vir: dr. Anže Burger, Uspešna Slovenija 1/2026. Uvrstitev IMD po navedbi sogovornika.</small></div>`;
+}
+
+function oglas(){
+  return `<aside class="oglas" aria-label="Partner"><span class="oznaka">Partner</span><div class="ploskev"><div><b>Prostor za partnerja</b><span>pasica 970 × 250 · na telefonu 320 × 100</span></div></div></aside>`;
+}
+const omogoca = () => `<aside class="omogoca" aria-label="Partner prispevka"><p><b>Ta prispevek omogoča</b>Partnerji podpirajo izhajanje Uspešne Slovenije. Na vsebino prispevkov ne vplivajo.</p><span class="logo-mesto">logotip partnerja</span></aside>`;
+
+function prijava(){
+  return `<section class="noga-naslovnice" id="novicnik">
+    <div><strong>Tri razmišljanja. Vsak drugi teden.</strong><span>Podjetniki, strokovnjaki in ideje za prihodnost. Prijavite se in prejmite novo številko v nabiralnik.</span></div>
+    <form id="prijava" novalidate>
+      <label for="eposta" style="position:absolute;left:-9999px">E-pošta</label>
+      <input id="eposta" type="email" placeholder="vas@podjetje.si" autocomplete="email">
+      <button class="gumb" type="submit">Prijava</button>
+      <p class="odziv" id="odziv" aria-live="polite"></p>
+    </form>
+  </section>`;
+}
+
+function naslovnica(){
+  const [l, a, b] = NOVI.map(k => [k, CLANKI[k]]);
+  return `
+  <figure class="lead-slika"><a href="#${l[0]}"><img src="${l[1].slika}" alt="" width="1600" height="893"></a><figcaption>${l[1].foto}</figcaption></figure>
+  <article class="lead">
+    <div>${kicker(l[1])}<h2><a href="#${l[0]}">${l[1].naslov}</a></h2><p class="byline">${PISCI[l[1].pisec].ime}</p></div>
+    <p class="intro">${l[1].intro}</p>
+  </article>
+  <div class="par">
+    ${[a, b].map(([k, c]) => `<article><a class="slika" href="#${k}"><img src="${c.slika}" alt="" width="1600" height="893" loading="lazy"></a>${kicker(c)}<h3><a href="#${k}">${c.naslov}</a></h3><p class="byline">${PISCI[c.pisec].ime}</p></article>`).join("")}
+  </div>
+
+  ${oglas()}
+
+  <section class="misel" aria-label="Misel iz arhiva">
+    <p>»Prihodnost se ne začne jutri. Prihodnost sedi danes v naših učilnicah.«</p>
+    <p class="byline">${PISCI.kristovic.ime}<a href="#ne-vzgajajmo-gledalcev">Preberi esej</a></p>
+  </section>
+
+  <div class="razdelek"><h2>Znova preberi</h2><p>Uredniški izbor starejših razmišljanj, ki so ob današnjih razpravah spet aktualna.</p></div>
+  <div class="trojec">
+    ${IZBOR.map(k => { const c = CLANKI[k]; return `<article><a class="slika" href="#${k}"><img src="${c.slika}" alt="${PISCI[c.pisec].ime}" width="1080" height="620" loading="lazy"></a>${kicker(c)}<h3><a href="#${k}">${c.naslov}</a></h3><p class="intro">${c.intro}</p><p class="byline">${PISCI[c.pisec].ime} <span>· ${kdaj(c)}</span></p></article>`; }).join("")}
+  </div>
+
+  <div class="razdelek"><h2>Pisci</h2><p><a href="#pisci" style="color:var(--green);font-weight:700">Vsi pisci →</a></p></div>
+  <div class="pisci-trak">
+    ${Object.keys(PISCI).map(id => `<a href="#pisci">${obraz(id)}<span><b>${PISCI[id].ime}</b><small>${prispevki(VRSTNI_RED.filter(k => CLANKI[k].pisec === id).length)}</small></span></a>`).join("")}
+  </div>
+  ${prijava()}`;
+}
+
+function clanek(k){
+  const c = CLANKI[k], p = PISCI[c.pisec];
+  const telo = c.besedilo ? c.besedilo.map(([t, v]) => {
+    if (t === "p") return `<p>${v}</p>`;
+    if (t === "q") return `<blockquote><p>»${v}«</p></blockquote>`;
+    if (t === "h") return `<h2>${v}</h2>`;
+    if (t === "podatki") return podatki();
+    if (t === "model") return `<div class="model"><div><b>Glava</b><span>znanje, kritična presoja, ustvarjalnost</span></div><div><b>Srce</b><span>odnos, empatija, vrednote, odgovornost</span></div><div><b>Roka</b><span>delo, dejanje, vztrajanje</span></div></div>`;
+    return "";
+  }).join("") : "";
+  const sorodni = VRSTNI_RED.filter(x => x !== k).sort((x, y) => (CLANKI[y].tema === c.tema) - (CLANKI[x].tema === c.tema)).slice(0, 3);
+  return `
+  <article class="clanek">
+    ${kicker(c)}
+    <h1>${c.naslov}</h1>
+    ${c.intro ? `<p class="intro">${c.intro}</p>` : ""}
+    <div class="podpis">
+      <a href="#pisci">${obraz(c.pisec)}<span class="byline">${p.ime}<time ${IZDAJE[c.izdaja].iso ? `datetime="${IZDAJE[c.izdaja].iso}"` : ""}>${TEME[c.tema].ime} · ${kdaj(c)}</time></span></a>
+      <button class="gumb obroba" type="button" id="kopiraj">Kopiraj povezavo</button>
+    </div>
+    ${c.slika ? (c.foto.startsWith("Ilustracija")
+      ? `<figure><img src="${c.slika}" alt="" width="1600" height="893"><figcaption>${c.foto}</figcaption></figure>`
+      : `<figure><img src="${c.slika}" alt="${p.ime}" width="1080" height="620"><figcaption>${p.ime}. ${c.foto}</figcaption></figure>`) : ""}
+    <div class="besedilo">
+      ${c.besedilo
+        ? `<p class="opomba">Vzorec strani: besedilo je sestavljeno iz povzetkov in dobesednih citatov iz številke 1/2026. Na objavljeni strani tu stoji celoten prispevek.</p>${telo}`
+        : `<div class="manjka"><b>Tu bo celotno besedilo prispevka.</b><span>V vzorec so vneseni samo naslov, avtor in tema iz predloga naslovnice. Ko dobimo besedilo, se stran izriše enako kot prispevki iz številke 1/2026: uvod, izpostavljeni citati, vprašanja na koncu in povezani prispevki.</span><a href="#cim-vec-bogatih" style="color:var(--green);font-weight:700;font-size:14px;margin-top:4px">Poglej izpolnjen primer →</a></div>`}
+    </div>
+    ${c.vprasanja ? `<section class="vprasanja"><h2>Na kaj odgovarja ta prispevek</h2>${c.vprasanja.map(([q, a], i) => `<details${i === 0 ? " open" : ""}><summary>${q}</summary><p>${a}</p></details>`).join("")}</section>` : ""}
+    <aside class="o-avtorju">${obraz(c.pisec)}<div><h3>${p.ime}</h3><p>${p.vloga}</p><a class="vec" href="#pisci">Vsa besedila avtorja →</a></div></aside>
+    ${omogoca()}
+  </article>
+  <div class="razdelek se"><h2>Preberi še</h2></div>
+  <div class="trojec">${sorodni.map(x => { const o = CLANKI[x]; return `<article><a class="slika" href="#${x}"><img src="${o.slika}" alt="" width="1080" height="620" loading="lazy"></a>${kicker(o)}<h3><a href="#${x}">${o.naslov}</a></h3><p class="byline">${PISCI[o.pisec].ime} <span>· ${kdaj(o)}</span></p></article>`; }).join("")}</div>
+  ${prijava()}`;
+}
+
+function tema(t){
+  const T = TEME[t];
+  const k = VRSTNI_RED.filter(x => CLANKI[x].tema === t);
+  return `<div class="glava-strani"><h1>${T.ime}</h1><p>${T.opis}</p></div>
+  <div class="seznam">${k.map(x => { const c = CLANKI[x]; return `<article><p class="kdaj">${IZDAJE[c.izdaja].ime}<br>${kdaj(c)}</p><div>${kicker(c)}<h3><a href="#${x}">${c.naslov}</a></h3>${c.intro ? `<p class="intro">${c.intro}</p>` : ""}<p class="byline">${PISCI[c.pisec].ime}</p></div><a class="slika" href="#${x}"><img src="${c.slika}" alt="" width="1080" height="620" loading="lazy"></a></article>`; }).join("")}</div>
+  <p class="prazno">Nova razmišljanja na to temo se dodajo na vrh seznama.</p>
+  ${oglas()}`;
+}
+
+function arhiv(){
+  return `<div class="glava-strani"><h1>Arhiv</h1><p>Vse številke na enem mestu. Vsak prispevek ima svojo stalno povezavo, zato ga lahko delite tudi leto po objavi.</p></div>
+  ${Object.entries(IZDAJE).map(([id, iz]) => `<div class="izdaja"><div><h2>${iz.ime}</h2><time>${iz.datum}</time></div><ul>${VRSTNI_RED.filter(k => CLANKI[k].izdaja === id).map(k => { const c = CLANKI[k]; return `<li>${kicker(c)}<a href="#${k}">${c.naslov}</a><span class="byline">${PISCI[c.pisec].ime}</span></li>`; }).join("")}</ul></div>`).join("")}`;
+}
+
+function pisci(){
+  return `<div class="glava-strani"><h1>Pisci</h1><p>Podjetniki, ekonomisti, zdravniki in profesorji, ki za Uspešno Slovenijo pišejo o odločitvah za uspešnejšo državo.</p></div>
+  <div class="mreza">${Object.entries(PISCI).map(([id, p]) => `<article class="pisec">${obraz(id)}<h2>${p.ime}</h2><p class="vloga">${p.vloga}</p><ul>${VRSTNI_RED.filter(k => CLANKI[k].pisec === id).map(k => `<li><a href="#${k}">${CLANKI[k].naslov}</a><small>${TEME[CLANKI[k].tema].ime} · ${kdaj(CLANKI[k])}</small></li>`).join("")}</ul></article>`).join("")}</div>`;
+}
+
+function izrisi(){
+  const pot = location.hash.replace(/^#/, "");
+  let html, aktivna = pot;
+  if (CLANKI[pot]) { html = clanek(pot); aktivna = CLANKI[pot].tema; document.title = CLANKI[pot].naslov + " | Uspešna Slovenija"; }
+  else if (TEME[pot]) { html = tema(pot); document.title = TEME[pot].ime + " | Uspešna Slovenija"; }
+  else if (pot === "pisci") { html = pisci(); document.title = "Pisci | Uspešna Slovenija"; }
+  else if (pot === "arhiv") { html = arhiv(); document.title = "Arhiv | Uspešna Slovenija"; }
+  else { html = naslovnica(); aktivna = ""; document.title = "Uspešna Slovenija"; }
+  $("#vsebina").innerHTML = html;
+  document.querySelectorAll("#meni a").forEach(a => {
+    if (a.dataset.pot === aktivna) a.setAttribute("aria-current", "page"); else a.removeAttribute("aria-current");
+  });
+  if (pot === "novicnik") $("#novicnik").scrollIntoView(); else window.scrollTo(0, 0);
+  const f = $("#prijava");
+  if (f) f.addEventListener("submit", e => {
+    e.preventDefault();
+    const v = $("#eposta").value.trim();
+    $("#odziv").textContent = /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v)
+      ? "V vzorcu prijava ni povezana. Na pravi strani gre naslov naravnost na seznam novičnika."
+      : "Vpišite e-poštni naslov, na primer ime@podjetje.si.";
+  });
+  const k = $("#kopiraj");
+  if (k) k.addEventListener("click", () => {
+    const ok = () => { k.textContent = "Povezava kopirana"; setTimeout(() => k.textContent = "Kopiraj povezavo", 2000); };
+    try { navigator.clipboard.writeText(location.href).then(ok, () => k.textContent = "Kopiranje ni uspelo"); }
+    catch { k.textContent = "Kopiranje ni uspelo"; }
+  });
+}
+// Manjkajoča slika ali portret: namesto ikone za napako mirna ploskev --wash (dokler ni prave datoteke).
+document.addEventListener("error", e => {
+  const img = e.target;
+  if (img.tagName !== "IMG" || img.dataset.nadomestek) return;
+  img.dataset.nadomestek = "1";
+  img.src = "data:image/svg+xml," + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="16" height="10"><rect width="16" height="10" fill="#E9EDE3"/></svg>');
+}, true);
+window.addEventListener("hashchange", izrisi);
+izrisi();
+</script>
+</body>
+</html>
