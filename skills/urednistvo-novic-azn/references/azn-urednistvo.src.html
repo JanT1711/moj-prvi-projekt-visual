@@ -1,0 +1,782 @@
+<title>Uredništvo Novic AZN</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Pilot uredniškega dashboarda za spletno stran Novice AZN.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap">
+<style>
+/* Postavitev: uredniški pult – levi stolpec z razdelki, desno delovna površina (seznam, urejevalnik, naslovnica); javna stran je ista datoteka pod #stran v časopisni postavitvi. */
+:root{
+  --bg:#F6F4EE;          /* ozadje pulta */
+  --card:#FFFFFF;        /* delovne površine */
+  --paper:#F7F3E8;       /* javna stran */
+  --panel:#EDE6D3;
+  --ink:#1E1F21;
+  --muted:#5D5C57;
+  --rule:#DDD6C4;
+  --gold:#C2A303;        /* zlata iz logotipa */
+  --kicker:#7D6A02;      /* temno zlata za besedilo */
+  --graphite:#2A2B2E;
+  --on-graphite:#FFFFFF;
+  --on-graphite-muted:#C4C4C8;
+  --chip:#F1DFA0;
+  --ok:#2F6B3A; --ok-bg:#E1EEDC;
+  --warn:#7A5A00; --warn-bg:#F6EBC4;
+  --off:#5D5C57; --off-bg:#ECEAE3;
+  --danger:#A3322A;
+  --f-serif:'Source Serif 4',Georgia,'Times New Roman',serif;
+  --f-sans:'Trebuchet MS','Lucida Grande','Lucida Sans Unicode',Tahoma,sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#18181A;--card:#212124;--paper:#1C1C1E;--panel:#2A2A2D;--ink:#EDEBE6;--muted:#AAA79F;--rule:#38373A;
+  --gold:#C2A303;--kicker:#D8BC2E;--graphite:#0E0E0F;--on-graphite:#FFFFFF;--on-graphite-muted:#B9B9BD;--chip:#4A4116;
+  --ok:#8FD19B;--ok-bg:#1F3523;--warn:#E7C760;--warn-bg:#3A3112;--off:#AAA79F;--off-bg:#2C2C2F;--danger:#F08A80;color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#18181A;--card:#212124;--paper:#1C1C1E;--panel:#2A2A2D;--ink:#EDEBE6;--muted:#AAA79F;--rule:#38373A;
+  --gold:#C2A303;--kicker:#D8BC2E;--graphite:#0E0E0F;--on-graphite:#FFFFFF;--on-graphite-muted:#B9B9BD;--chip:#4A4116;
+  --ok:#8FD19B;--ok-bg:#1F3523;--warn:#E7C760;--warn-bg:#3A3112;--off:#AAA79F;--off-bg:#2C2C2F;--danger:#F08A80;color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-sans);font-size:15px;line-height:1.5}
+body.javna-stran{background:var(--paper)}
+a{color:inherit}
+h1,h2,h3,p{margin:0}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.logo-n{display:none}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .logo-p{display:none}:root:not([data-theme="light"]) .logo-n{display:block}}
+:root[data-theme="dark"] .logo-p{display:none}:root[data-theme="dark"] .logo-n{display:block}
+
+/* ========== PULT ========== */
+.pult{display:grid;grid-template-columns:232px minmax(0,1fr);min-height:100%}
+.stranski{background:var(--graphite);color:var(--on-graphite-muted);padding-block:22px;padding-left:max(18px,env(safe-area-inset-left,0px));padding-right:18px;display:flex;flex-direction:column;gap:22px}
+.stranski .znamka{display:flex;flex-direction:column;gap:6px;color:var(--on-graphite)}
+.stranski .znamka img{height:40px;width:auto;align-self:flex-start}
+.stranski .znamka small{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--on-graphite-muted)}
+.stranski nav ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:2px}
+.stranski nav a{display:flex;justify-content:space-between;align-items:center;gap:8px;text-decoration:none;padding:9px 10px;border-radius:3px;color:var(--on-graphite-muted)}
+.stranski nav a:hover{background:rgba(255,255,255,.06);color:var(--on-graphite)}
+.stranski nav a[aria-current="page"]{background:rgba(194,163,3,.16);color:var(--on-graphite);box-shadow:inset 3px 0 0 var(--gold)}
+.stranski nav .st{font-size:12px;font-variant-numeric:tabular-nums;color:var(--on-graphite-muted)}
+.stranski .javna-pov{margin-top:auto;display:block;text-align:center;text-decoration:none;border:1px solid rgba(255,255,255,.25);color:var(--on-graphite);padding:10px;border-radius:3px}
+.stranski .javna-pov:hover{border-color:var(--gold)}
+.stranski .jaz{font-size:12px;color:var(--on-graphite-muted)}
+
+.delo{padding-block:26px 60px;padding-left:28px;padding-right:max(28px,env(safe-area-inset-right,0px));min-width:0}
+.glava-dela{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:12px 20px;margin-bottom:20px}
+.glava-dela h1{font-family:var(--f-serif);font-weight:600;font-size:30px;letter-spacing:-.01em}
+.glava-dela p{color:var(--muted);margin-top:2px}
+.vrstica{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+
+.gumb{display:inline-flex;align-items:center;justify-content:center;gap:8px;background:var(--graphite);color:var(--on-graphite);border:1px solid var(--graphite);font-weight:700;font-size:14px;line-height:1;padding:10px 14px;border-radius:3px;cursor:pointer;text-decoration:none;white-space:nowrap}
+.gumb:hover{background:var(--kicker);border-color:var(--kicker);color:#fff}
+.gumb.zlat{background:var(--gold);border-color:var(--gold);color:#1E1F21}
+.gumb.zlat:hover{filter:brightness(1.07);background:var(--gold);color:#1E1F21}
+.gumb.obroba{background:transparent;color:var(--ink);border-color:var(--rule)}
+.gumb.obroba:hover{border-color:var(--ink);background:transparent;color:var(--ink)}
+.gumb.nevaren{background:transparent;color:var(--danger);border-color:var(--rule)}
+.gumb.nevaren:hover{border-color:var(--danger);background:transparent;color:var(--danger)}
+.gumb.majhen{padding:7px 10px;font-size:13px}
+.gumb[disabled]{opacity:.5;cursor:not-allowed}
+
+.karta{background:var(--card);border:1px solid var(--rule);border-radius:4px}
+.karta>header{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px 18px;border-bottom:1px solid var(--rule)}
+.karta>header h2{font-size:16px}
+.karta .telo{padding:16px 18px}
+
+.stevci{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-bottom:20px}
+.stevec{background:var(--card);border:1px solid var(--rule);border-radius:4px;padding:14px 16px}
+.stevec b{display:block;font-family:var(--f-serif);font-size:32px;font-weight:600;line-height:1.1;font-variant-numeric:tabular-nums}
+.stevec span{color:var(--muted);font-size:13px}
+.mreza-2{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:18px;align-items:start}
+
+.status{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;padding:3px 8px;border-radius:999px;white-space:nowrap}
+.status::before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor}
+.status.objavljeno{color:var(--ok);background:var(--ok-bg)}
+.status.spremembe{color:var(--warn);background:var(--warn-bg)}
+.status.osnutek{color:var(--off);background:var(--off-bg)}
+
+.tabela-ovoj{overflow-x:auto}
+table{width:100%;border-collapse:collapse}
+th,td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--rule);vertical-align:middle}
+th{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:700;background:var(--card)}
+td.naslov a{font-family:var(--f-serif);font-size:17px;font-weight:600;text-decoration:none}
+td.naslov a:hover{text-decoration:underline;text-decoration-color:var(--gold)}
+td.naslov small{display:block;color:var(--muted);font-size:13px;margin-top:2px}
+td .sl{width:64px;height:40px;border-radius:2px;object-fit:cover;background:var(--panel);display:block}
+td.akc{text-align:right;white-space:nowrap}
+.filtri{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.filtri input,.filtri select{border:1px solid var(--rule);background:var(--card);padding:8px 10px;border-radius:3px;min-width:0}
+.prazno{padding:28px 18px;color:var(--muted);text-align:center}
+.prazno b{display:block;color:var(--ink);font-size:16px;margin-bottom:4px}
+
+/* obrazci */
+.obrazec{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:18px;align-items:start}
+.polja{display:flex;flex-direction:column;gap:16px}
+.polje{display:flex;flex-direction:column;gap:6px}
+.polje label,.polje .oznaka{font-size:13px;font-weight:700}
+.polje small{color:var(--muted);font-size:12.5px}
+.polje input,.polje select,.polje textarea{border:1px solid var(--rule);background:var(--card);padding:10px 12px;border-radius:3px;min-width:0;width:100%}
+.polje textarea{resize:vertical;line-height:1.55}
+.polje input.velik{font-family:var(--f-serif);font-size:24px;font-weight:600;padding:10px 12px}
+.polje textarea.serif{font-family:var(--f-serif);font-size:17px}
+.dva{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.stevilo{font-size:12px;color:var(--muted);text-align:right}
+.stevilo.prevec{color:var(--danger)}
+.lepljivo{position:sticky;top:max(16px,env(safe-area-inset-top,0px));display:flex;flex-direction:column;gap:14px}
+.objava-polje{display:flex;flex-direction:column;gap:10px}
+.objava-polje .vrstica .gumb{flex:1}
+.drobno{font-size:12.5px;color:var(--muted)}
+.potrdi{border:1px solid var(--danger);border-radius:3px;padding:10px 12px;display:flex;flex-direction:column;gap:8px}
+.potrdi p{font-size:13px}
+.slika-izbor{display:flex;flex-direction:column;gap:10px}
+.slika-izbor .izbrana{aspect-ratio:16/9;max-width:100%;background:var(--panel);border-radius:3px;overflow:hidden;display:grid;place-items:center;color:var(--muted);font-size:13px;text-align:center;padding:0}
+.slika-izbor .izbrana img{width:100%;height:100%;object-fit:cover;display:block}
+.galerija{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}
+.galerija.mala{grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;max-height:220px;overflow:auto}
+.foto{background:var(--card);border:1px solid var(--rule);border-radius:4px;overflow:hidden;display:flex;flex-direction:column}
+.foto img,.foto .ph{width:100%;aspect-ratio:16/10;object-fit:cover;display:block;background:var(--panel)}
+.foto .opis{padding:8px 10px;font-size:13px;display:flex;flex-direction:column;gap:6px}
+.foto .opis small{color:var(--muted)}
+.foto input{border:1px solid var(--rule);background:var(--card);padding:6px 8px;border-radius:3px;font-size:13px;min-width:0;width:100%}
+.izberi-foto{border:2px solid transparent;border-radius:3px;padding:0;background:var(--panel);cursor:pointer;overflow:hidden;aspect-ratio:16/10}
+.izberi-foto img{width:100%;height:100%;object-fit:cover;display:block}
+.izberi-foto[aria-pressed="true"]{border-color:var(--gold)}
+.nalozi{border:2px dashed var(--rule);border-radius:4px;padding:22px;text-align:center;color:var(--muted);display:flex;flex-direction:column;gap:8px;align-items:center}
+.nalozi.cez{border-color:var(--gold);background:var(--panel)}
+
+/* naslovnica – shema */
+.shema{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1.45fr) minmax(0,.8fr);gap:0;border-top:2px solid var(--ink)}
+.shema>div{padding:14px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.shema>div+div{border-left:1px solid var(--rule)}
+.reza{display:flex;flex-direction:column;gap:6px}
+.reza .oznaka{font-size:12px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;color:var(--kicker)}
+.reza select,.reza input{border:1px solid var(--rule);background:var(--card);padding:9px 10px;border-radius:3px;min-width:0;width:100%}
+.trak-sh{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;padding:14px 0;border-top:1px solid var(--rule)}
+
+/* povezave */
+.vrsta-pov{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.4fr) 150px auto;gap:10px;align-items:center;padding:10px 0;border-bottom:1px solid var(--rule)}
+.vrsta-pov input,.vrsta-pov select{border:1px solid var(--rule);background:var(--card);padding:8px 10px;border-radius:3px;min-width:0;width:100%}
+.vrsta-teme{grid-template-columns:minmax(0,.8fr) minmax(0,1.6fr) 90px auto}
+
+.obvestilo{position:fixed;left:50%;bottom:max(20px,calc(env(safe-area-inset-bottom,0px) + 12px));transform:translateX(-50%);background:var(--graphite);color:var(--on-graphite);padding:11px 16px;border-radius:3px;font-size:14px;z-index:20;box-shadow:0 6px 24px rgba(0,0,0,.25);max-width:calc(100% - 32px)}
+.opozorilo{background:var(--warn-bg);color:var(--ink);border:1px solid var(--rule);border-radius:4px;padding:12px 14px;margin-bottom:16px;font-size:14px}
+
+/* ========== JAVNA STRAN (časopisna postavitev) ========== */
+.javna{background:var(--paper);color:var(--ink);font-size:16px;min-height:100%}
+.javna .wrap{max-width:1320px;margin-inline:auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+@media (min-width:900px){.javna .wrap{padding-left:max(40px,env(safe-area-inset-left,0px));padding-right:max(40px,env(safe-area-inset-right,0px))}}
+.javna a{text-decoration:none}
+.javna h1,.javna h2,.javna h3{font-family:var(--f-serif);font-weight:600;text-wrap:balance;letter-spacing:-.01em}
+.urednik-pas{background:var(--graphite);color:var(--on-graphite-muted);font-size:13px}
+.urednik-pas .wrap{display:flex;justify-content:space-between;gap:12px;padding-block:7px;flex-wrap:wrap}
+.urednik-pas a{color:var(--on-graphite)}
+.urednik-pas a:hover{color:var(--gold)}
+.j-obvestilo{background:var(--chip);text-align:center;font-size:14px;padding-block:7px}
+.j-glava .vrh{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:16px;padding-block:16px 12px}
+.j-glava .logo{display:flex;flex-direction:column;align-items:center;gap:6px}
+.j-glava .logo img{height:60px;width:auto}
+.j-glava .logo small{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+.j-glava .desno{display:flex;justify-content:flex-end;gap:18px;align-items:center;font-size:15px}
+.j-glava .desno a:hover{color:var(--kicker)}
+.j-rub{border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+.j-rub ul{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:0 22px}
+.j-rub a{display:block;padding:12px 0 9px;font-size:13.5px;font-weight:700;letter-spacing:.02em;text-transform:uppercase;border-bottom:4px solid transparent}
+.j-rub a:hover{color:var(--kicker)}
+.j-rub a[aria-current="page"]{color:var(--kicker);border-bottom-color:var(--gold)}
+.javna main{padding-block:32px 60px}
+.j-kicker{display:inline-block;font-size:17px;color:var(--kicker);margin-bottom:10px}
+.j-stand{font-size:18px;line-height:1.55;color:var(--muted)}
+.j-chip{display:inline-block;font-size:13px;letter-spacing:.06em;text-transform:uppercase;background:var(--chip);padding:5px 8px}
+.j-datum{font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
+.javna h2 a:hover,.javna h3 a:hover{color:var(--muted)}
+.j-prva{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1.45fr) minmax(0,.8fr)}
+.j-prva>*{padding-inline:22px;min-width:0}
+.j-prva>*:first-child{padding-left:0}
+.j-prva>*:last-child{padding-right:0}
+.j-prva>*+*{border-left:1px solid var(--rule)}
+.j-vod h2{font-size:clamp(32px,3.4vw,50px);line-height:1.06;margin-bottom:16px}
+.j-vod .j-stand{margin-bottom:14px}
+.j-vod .druga{margin-top:30px;padding-top:16px;border-top:1px solid var(--rule)}
+.j-vod .druga h3{font-size:21px;line-height:1.25;margin-bottom:6px}
+.j-slika{display:block}
+.j-slika .pl{aspect-ratio:16/9;max-width:100%;background:var(--graphite);overflow:hidden;position:relative}
+.j-slika .pl img{width:100%;height:100%;object-fit:cover;display:block}
+.j-slika canvas{position:absolute;inset:0;width:100%;height:100%}
+.j-slika .napis{background:var(--panel);text-align:center;padding:20px 20px 24px}
+.j-slika .napis h2{font-size:clamp(23px,2.3vw,32px);line-height:1.15}
+.j-izbor>h2{font-family:var(--f-sans)!important;font-weight:400!important;font-size:17px;color:var(--kicker);margin-bottom:12px}
+.j-izbor article{padding-block:14px;border-bottom:1px solid var(--rule)}
+.j-izbor article:first-of-type{padding-top:0}
+.j-izbor h3{font-size:22px;line-height:1.22;margin-bottom:10px}
+.j-izbor h3::before{content:"\201C";color:var(--gold);font-weight:700;font-size:1.5em;line-height:0;vertical-align:-.28em;margin-right:.08em}
+.j-izbor .vir{font-size:14px;color:var(--muted)}
+.j-trak{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));margin-top:34px;border-top:2px solid var(--ink)}
+.j-trak article{padding:16px 20px 18px;min-width:0}
+.j-trak article:first-child{padding-left:0}
+.j-trak article:last-child{padding-right:0}
+.j-trak article+article{border-left:1px solid var(--rule)}
+.j-trak .j-kicker{font-size:14px;margin-bottom:6px}
+.j-trak h3{font-size:19px;line-height:1.25;margin-bottom:8px}
+.j-razdelek{margin-top:44px}
+.j-razdelek>header{display:flex;align-items:baseline;justify-content:space-between;gap:12px;border-top:2px solid var(--ink);padding-top:10px;margin-bottom:6px}
+.j-razdelek>header h2{font-size:26px}
+.j-razdelek>header p{font-size:14px;color:var(--muted)}
+.j-seznam{list-style:none;margin:0;padding:0}
+.j-seznam li{display:grid;grid-template-columns:minmax(0,1fr) 120px;gap:24px;padding-block:18px;border-bottom:1px solid var(--rule)}
+.j-seznam h3{font-size:22px;line-height:1.22;margin-bottom:6px}
+.j-seznam p{color:var(--muted);font-size:15px;max-width:68ch}
+.j-seznam .j-datum{text-align:right;padding-top:4px}
+.j-clanek{max-width:760px}
+.j-clanek h1{font-size:clamp(32px,4.4vw,54px);line-height:1.06;margin-bottom:16px}
+.j-clanek .j-stand{font-size:21px;margin-bottom:18px}
+.j-podpis{display:flex;flex-wrap:wrap;align-items:center;gap:12px;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);padding-block:12px;margin-bottom:24px}
+.j-clanek figure{margin:0 0 26px}
+.j-clanek figure img{width:100%;aspect-ratio:16/9;object-fit:cover;display:block}
+.j-clanek figcaption{font-size:13px;color:var(--muted);margin-top:6px}
+.j-besedilo{font-family:var(--f-serif);font-size:19px;line-height:1.7;display:flex;flex-direction:column;gap:18px}
+.j-besedilo h2{font-size:24px;margin-top:8px}
+.j-besedilo blockquote{margin:6px 0;padding:14px 0;border-top:2px solid var(--ink);border-bottom:1px solid var(--rule);font-size:24px;line-height:1.3}
+.j-besedilo blockquote::before{content:"\201C";color:var(--gold);font-weight:700;font-size:1.5em;line-height:0;vertical-align:-.28em;margin-right:.08em}
+.j-tocke{margin:26px 0 0;padding:0;list-style:none;font-family:var(--f-serif);font-size:19px;line-height:1.55;display:flex;flex-direction:column;gap:12px}
+.j-tocke li{padding-left:22px;position:relative}
+.j-tocke li::before{content:"";position:absolute;left:0;top:.62em;width:9px;height:9px;background:var(--gold)}
+.j-okvir{margin-top:30px;padding:18px 0;border-top:2px solid var(--ink);border-bottom:1px solid var(--rule)}
+.j-okvir .j-kicker{font-size:14px;letter-spacing:.08em;text-transform:uppercase;font-weight:700}
+.j-okvir p{font-family:var(--f-serif);font-size:24px;line-height:1.3}
+.j-okvir ul{margin:6px 0 0;padding-left:20px;font-family:var(--f-serif);font-size:18px;display:flex;flex-direction:column;gap:6px}
+.j-vir{font-size:14px;color:var(--muted);margin-top:20px}
+.j-noga{border-top:1px solid var(--rule);font-size:14px;color:var(--muted)}
+.j-noga .wrap{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:28px;align-items:center;padding-block:26px 34px}
+.j-noga img{height:38px;width:auto}
+.j-noga ul{list-style:none;margin:0;padding:0;display:flex;gap:8px 20px;flex-wrap:wrap}
+.j-noga a{color:var(--ink)}
+.j-noga a:hover{color:var(--kicker)}
+
+@media (max-width:1060px){
+  .j-prva{grid-template-columns:minmax(0,1fr) minmax(0,1.2fr)}
+  .j-izbor{grid-column:1/-1;border-left:0!important;padding-left:0!important;margin-top:28px;padding-top:14px;border-top:2px solid var(--ink)}
+  .obrazec{grid-template-columns:minmax(0,1fr)}
+  .lepljivo{position:static}
+  .mreza-2{grid-template-columns:minmax(0,1fr)}
+  .shema{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+  .shema>div:last-child{grid-column:1/-1;border-left:0;border-top:1px solid var(--rule)}
+}
+@media (max-width:760px){
+  .pult{grid-template-columns:minmax(0,1fr)}
+  .stranski{padding-block:12px;padding-right:max(16px,env(safe-area-inset-right,0px));padding-left:max(16px,env(safe-area-inset-left,0px));gap:10px}
+  .stranski .znamka{flex-direction:row;align-items:center;justify-content:space-between}
+  .stranski nav ul{flex-direction:row;overflow-x:auto;gap:4px}
+  .stranski nav a{white-space:nowrap}
+  .stranski nav .st{display:none}
+  .stranski .javna-pov,.stranski .jaz{display:none}
+  .delo{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+  .stevci{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .dva{grid-template-columns:minmax(0,1fr)}
+  .shema,.trak-sh{grid-template-columns:minmax(0,1fr)}
+  .shema>div+div{border-left:0;border-top:1px solid var(--rule)}
+  .vrsta-pov,.vrsta-teme{grid-template-columns:minmax(0,1fr)}
+  .j-glava .vrh{grid-template-columns:1fr auto}
+  .j-glava .vrh>span{display:none}
+  .j-glava .logo{align-items:flex-start}
+  .j-glava .logo img{height:44px}
+  .j-glava .logo small{display:none}
+  .j-prva{grid-template-columns:minmax(0,1fr)}
+  .j-prva>*{padding-inline:0!important;border-left:0!important}
+  .j-slika{order:-1;margin-bottom:20px}
+  .j-trak{grid-template-columns:minmax(0,1fr)}
+  .j-trak article{padding-inline:0!important;border-left:0!important}
+  .j-trak article+article{border-top:1px solid var(--rule)}
+  .j-seznam li{grid-template-columns:minmax(0,1fr);gap:4px}
+  .j-seznam .j-datum{text-align:left;order:-1}
+  .j-noga .wrap{grid-template-columns:minmax(0,1fr)}
+  td.skrij{display:none}
+}
+</style>
+
+<div id="app"><div class="prazno" style="padding:60px 16px"><b>Nalagam uredništvo …</b>Povezujem se s shrambo člankov.</div></div>
+<div class="obvestilo" id="obvestilo" role="status" aria-live="polite" hidden></div>
+
+<script>
+const LOGO_P = "LOGO_POZ_URI";
+const LOGO_N = "LOGO_NEG_URI";
+const PUBLIKA = { siroka: "Za zavarovance", strokovna: "Za stroko" };
+
+const S = {
+  db: null, user: null, assets: null, mojId: null,
+  lahkoPise: null,      // null = platforma ne pove; odloči zavrnjen zapis
+  lahkoNalaga: false,
+  bralnoSamo: false,    // po zavrnjenem zapisu
+  pripravljeno: false, brezDb: false,
+  clanki: [], objave: [], teme: [], povezave: [], fotografije: [],
+  naslovnica: {},
+  urejaId: null, urejevalnikUmazan: false, naslovnicaUmazana: false,
+  isci: "", filterStatus: "vse", brisanje: null, javnoIsci: ""
+};
+const $ = s => document.querySelector(s);
+const esc = v => String(v ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const blob = id => id ? "/_blob/" + id : "";
+const datum = iso => { if (!iso) return ""; const [y, m, d] = iso.slice(0, 10).split("-"); return `${+d}. ${+m}. ${y}`; };
+const zdaj = () => new Date().toISOString();
+const danes = () => new Date().toISOString().slice(0, 10);
+const slug = t => (t || "clanek").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 48) || "clanek";
+const novId = t => slug(t) + "-" + Math.random().toString(36).slice(2, 6);
+const vrstice = t => String(t || "").split("\n").map(s => s.trim()).filter(Boolean);
+const tema = id => S.teme.find(t => t.id === id);
+const imeTeme = id => tema(id)?.ime || "Brez rubrike";
+const foto = id => S.fotografije.find(f => f.id === id);
+const objavaZa = id => S.objave.find(o => o.id === id);
+const pisem = () => !S.bralnoSamo && S.lahkoPise !== false;
+
+function obvesti(t){ const o = $("#obvestilo"); o.textContent = t; o.hidden = false; clearTimeout(obvesti.t); obvesti.t = setTimeout(() => o.hidden = true, 3200); }
+async function zapis(fn, uspeh){
+  try { await fn(); if (uspeh) obvesti(uspeh); return true; }
+  catch (e) {
+    if (e?.code === "invalid_argument") { S.bralnoSamo = true; obvesti("Nimate pravice spreminjati vsebin. Za urejanje vas mora lastnik povabiti kot sodelavca (Contributor) ali urednika (Editor)."); izrisi(); }
+    else if (e?.code === "quota_exceeded") obvesti("Shramba je polna. Izbrišite stare osnutke ali fotografije in poskusite znova.");
+    else if (e?.code === "unavailable") obvesti("Povezava s shrambo je začasno prekinjena. Poskusite znova čez nekaj sekund.");
+    else obvesti("Shranjevanje ni uspelo (" + (e?.code || "napaka") + ").");
+    return false;
+  }
+}
+function stanje(c){
+  const o = objavaZa(c.id);
+  if (!o) return { cls: "osnutek", ime: "Osnutek" };
+  if ((c.posodobljeno || "") > (o.objavljeno || "")) return { cls: "spremembe", ime: "Neobjavljene spremembe" };
+  return { cls: "objavljeno", ime: "Objavljeno" };
+}
+const znacka = c => { const s = stanje(c); return `<span class="status ${s.cls}">${s.ime}</span>`; };
+
+/* ---------- zagon ---------- */
+async function zagon(){
+  const use = k => window.claude?.use ? window.claude.use(k).catch(() => null) : Promise.resolve(null);
+  const [db, user, assets] = await Promise.all([use("db"), use("user"), use("assets")]);
+  S.db = db; S.user = user; S.assets = assets; S.lahkoNalaga = !!assets;
+  if (!db) { S.brezDb = true; izrisi(); return; }
+  if (user) { S.mojId = await user.id(); S.lahkoPise = await user.can("data.write"); }
+  const napaka = e => { if (e?.code === "revoked") { S.brezDb = true; izrisi(); } };
+  const zbirka = (pot, kljuc, uredi) => db.collection(pot).onSnapshot(s => {
+    S[kljuc] = s.docs.map(d => ({ id: d.id, ...d.data() })); if (uredi) S[kljuc].sort(uredi); S.pripravljeno = true; izrisi(true);
+  }, napaka);
+  const poDatumu = (a, b) => (b.datum || "").localeCompare(a.datum || "") || (b.posodobljeno || "").localeCompare(a.posodobljeno || "");
+  if (S.lahkoPise !== false) zbirka("clanki", "clanki", poDatumu);
+  zbirka("objave", "objave", poDatumu);
+  zbirka("teme", "teme", (a, b) => (a.red ?? 99) - (b.red ?? 99));
+  zbirka("povezave", "povezave", (a, b) => (a.red ?? 99) - (b.red ?? 99));
+  zbirka("fotografije", "fotografije", (a, b) => (b.ustvarjeno || "").localeCompare(a.ustvarjeno || ""));
+  db.doc("stran/naslovnica").onSnapshot(d => { S.naslovnica = d.exists ? d.data() : {}; izrisi(true); }, napaka);
+  izrisi();
+}
+
+/* ---------- usmerjanje ---------- */
+function pot(){ return location.hash.replace(/^#/, ""); }
+function izrisi(izPodatkov){
+  const p = pot();
+  const urednik = S.lahkoPise !== false && !S.brezDb;
+  if (p.startsWith("stran") || !urednik) return izrisiJavno(p.startsWith("stran") ? p : "stran", izPodatkov);
+  document.body.classList.remove("javna-stran");
+  if (p.startsWith("uredi-") || p === "nov") {
+    const id = p === "nov" ? null : p.slice(6);
+    if (izPodatkov && S.urejevalnikUmazan && S.urejaId === id) return osveziStanjeUrejevalnika();
+    return lupina("clanki", urejevalnik(id), () => vezUrejevalnik(id));
+  }
+  if (p === "clanki") return lupina("clanki", seznamClankov(), vezSeznam);
+  if (p === "naslovnica") { if (izPodatkov && S.naslovnicaUmazana) return; return lupina("naslovnica", urediNaslovnico(), vezNaslovnico); }
+  if (p === "fotografije") return lupina("fotografije", stranFotografij(), vezFotografije);
+  if (p === "povezave") return lupina("povezave", stranPovezav(), vezPovezave);
+  return lupina("pregled", pregled(), vezPregled);
+}
+
+function lupina(aktivna, vsebina, vez){
+  const n = (k, ime, st) => `<li><a href="#${k}" ${aktivna === k ? 'aria-current="page"' : ""}><span>${ime}</span>${st != null ? `<span class="st">${st}</span>` : ""}</a></li>`;
+  const osn = S.clanki.filter(c => stanje(c).cls !== "objavljeno").length;
+  $("#app").innerHTML = `<div class="pult">
+    <aside class="stranski">
+      <div class="znamka"><img class="logo-n" style="display:block" src="${LOGO_N}" alt="AZN – Agencija za zavarovalni nadzor"><small>Uredništvo novic</small></div>
+      <nav aria-label="Uredništvo"><ul>
+        ${n("pregled", "Pregled")}
+        ${n("clanki", "Članki", S.clanki.length)}
+        ${n("naslovnica", "Naslovnica")}
+        ${n("fotografije", "Fotografije", S.fotografije.length)}
+        ${n("povezave", "Povezave in rubrike", S.povezave.length + S.teme.length)}
+      </ul></nav>
+      ${osn ? `<p class="jaz">${osn} ${osn === 1 ? "članek čaka" : osn === 2 ? "članka čakata" : osn < 5 ? "članki čakajo" : "člankov čaka"} na objavo</p>` : ""}
+      <a class="javna-pov" href="#stran">Odpri javno stran →</a>
+    </aside>
+    <section class="delo">${S.bralnoSamo ? `<div class="opozorilo">Imate samo pravico branja. Spremembe se ne bodo shranile.</div>` : ""}${!S.pripravljeno ? `<div class="prazno"><b>Nalagam vsebine …</b></div>` : vsebina}</section>
+  </div>`;
+  if (S.pripravljeno && vez) vez();
+}
+
+/* ---------- PREGLED ---------- */
+function pregled(){
+  const obj = S.clanki.filter(c => stanje(c).cls === "objavljeno").length;
+  const spr = S.clanki.filter(c => stanje(c).cls === "spremembe").length;
+  const osn = S.clanki.filter(c => stanje(c).cls === "osnutek").length;
+  const zadnji = [...S.clanki].sort((a, b) => (b.posodobljeno || "").localeCompare(a.posodobljeno || "")).slice(0, 6);
+  const nas = S.naslovnica;
+  const vod = nas.vodilna && objavaZa(nas.vodilna);
+  const brezFoto = S.objave.filter(o => !o.slika).length;
+  return `<div class="glava-dela"><div><h1>Pregled</h1><p>Stanje spletne strani Novice AZN.</p></div>
+      <div class="vrstica"><a class="gumb zlat" href="#nov">+ Nov članek</a><a class="gumb obroba" href="#stran">Javna stran</a></div></div>
+    <div class="stevci">
+      <div class="stevec"><b>${obj}</b><span>objavljenih</span></div>
+      <div class="stevec"><b>${spr}</b><span>z neobjavljenimi spremembami</span></div>
+      <div class="stevec"><b>${osn}</b><span>osnutkov</span></div>
+      <div class="stevec"><b>${S.fotografije.length}</b><span>fotografij v knjižnici</span></div>
+    </div>
+    <div class="mreza-2">
+      <div class="karta"><header><h2>Nazadnje urejeno</h2><a class="gumb obroba majhen" href="#clanki">Vsi članki</a></header>
+        ${zadnji.length ? `<div class="tabela-ovoj"><table><tbody>${zadnji.map(c => `<tr><td class="naslov"><a href="#uredi-${esc(c.id)}">${esc(c.naslov || "(brez naslova)")}</a><small>${esc(imeTeme(c.tema))} · ${esc(datum(c.datum))}</small></td><td class="akc">${znacka(c)}</td></tr>`).join("")}</tbody></table></div>`
+          : `<div class="prazno"><b>Še ni člankov.</b>Prvega dodate z gumbom »Nov članek«.</div>`}
+      </div>
+      <div class="karta"><header><h2>Naslovnica zdaj</h2><a class="gumb obroba majhen" href="#naslovnica">Uredi</a></header>
+        <div class="telo" style="display:flex;flex-direction:column;gap:10px">
+          <div><span class="drobno">Vodilna novica</span><p style="font-family:var(--f-serif);font-size:18px;font-weight:600">${vod ? esc(vod.naslov) : "Samodejno: najnovejša objava"}</p></div>
+          ${nas.obvestilo ? `<div><span class="drobno">Obvestilo na vrhu</span><p>${esc(nas.obvestilo)}</p></div>` : ""}
+          ${brezFoto ? `<p class="drobno">${brezFoto} ${brezFoto === 1 ? "objava nima" : "objav nima"} fotografije. Na naslovnici se namesto nje pokaže motiv AZN.</p>` : ""}
+        </div>
+      </div>
+    </div>`;
+}
+function vezPregled(){}
+
+/* ---------- SEZNAM ČLANKOV ---------- */
+function seznamClankov(){
+  return `<div class="glava-dela"><div><h1>Članki</h1><p>Osnutki in objavljeni članki.</p></div><a class="gumb zlat" href="#nov">+ Nov članek</a></div>
+    <div class="karta"><header><div class="filtri">
+        <label for="isci" class="drobno" style="position:absolute;left:-9999px">Išči</label><input id="isci" type="search" placeholder="Išči po naslovu" value="${esc(S.isci)}">
+        <label for="fst" style="position:absolute;left:-9999px">Stanje</label><select id="fst">${[["vse", "Vsa stanja"], ["osnutek", "Osnutki"], ["spremembe", "Neobjavljene spremembe"], ["objavljeno", "Objavljeni"]].map(([v, i]) => `<option value="${v}" ${S.filterStatus === v ? "selected" : ""}>${i}</option>`).join("")}</select>
+      </div><span class="drobno" id="st-cl"></span></header>
+      <div id="seznam-cl"></div></div>`;
+}
+function vrsteClankov(){
+  const q = S.isci.toLowerCase();
+  const v = S.clanki.filter(c => (!q || (c.naslov || "").toLowerCase().includes(q)) && (S.filterStatus === "vse" || stanje(c).cls === S.filterStatus));
+  $("#st-cl").textContent = `${v.length} od ${S.clanki.length}`;
+  $("#seznam-cl").innerHTML = v.length ? `<div class="tabela-ovoj"><table><thead><tr><th class="skrij"></th><th>Naslov</th><th class="skrij">Publika</th><th>Stanje</th><th></th></tr></thead><tbody>
+    ${v.map(c => { const f = foto(c.slika); return `<tr><td class="skrij">${f ? `<img class="sl" src="${blob(f.asset)}" alt="">` : `<span class="sl"></span>`}</td>
+      <td class="naslov"><a href="#uredi-${esc(c.id)}">${esc(c.naslov || "(brez naslova)")}</a><small>${esc(imeTeme(c.tema))} · ${esc(datum(c.datum))}</small></td>
+      <td class="skrij">${esc(PUBLIKA[c.publika] || "")}</td><td>${znacka(c)}</td>
+      <td class="akc"><a class="gumb obroba majhen" href="#uredi-${esc(c.id)}">Uredi</a></td></tr>`; }).join("")}</tbody></table></div>`
+    : `<div class="prazno"><b>${S.clanki.length ? "Ni zadetkov." : "Še ni člankov."}</b>${S.clanki.length ? "Spremenite iskanje ali filter." : "Prvega dodate z gumbom »Nov članek«."}</div>`;
+}
+function vezSeznam(){
+  vrsteClankov();
+  $("#isci").addEventListener("input", e => { S.isci = e.target.value; vrsteClankov(); });
+  $("#fst").addEventListener("change", e => { S.filterStatus = e.target.value; vrsteClankov(); });
+}
+
+/* ---------- UREJEVALNIK ---------- */
+function urejevalnik(id){
+  const c = id ? S.clanki.find(x => x.id === id) : null;
+  if (id && !c) return `<div class="prazno"><b>Članka ni.</b>Morda je bil izbrisan. <a href="#clanki">Nazaj na seznam</a></div>`;
+  const v = c || { datum: danes(), publika: "siroka", tema: S.teme[0]?.id || "" };
+  S.urejaId = id; S.urejevalnikUmazan = false; S.izbranaSlika = v.slika || "";
+  const poljeD = (ime, oz, vred, pomoc, opts = "") => `<div class="polje"><label for="f-${ime}">${oz}</label>${opts || `<input id="f-${ime}" value="${esc(vred)}">`}${pomoc ? `<small>${pomoc}</small>` : ""}</div>`;
+  return `<div class="glava-dela"><div><p><a href="#clanki" style="text-decoration:none">← Članki</a></p><h1>${c ? "Uredi članek" : "Nov članek"}</h1></div><div id="st-ur">${c ? znacka(c) : `<span class="status osnutek">Nov osnutek</span>`}</div></div>
+  <form class="obrazec" id="ur" novalidate>
+    <div class="polja">
+      <div class="karta"><div class="telo polja">
+        <div class="polje"><label for="f-naslov">Naslov</label><input class="velik" id="f-naslov" value="${esc(v.naslov)}" placeholder="Naslov v obliki vprašanja ali trditve" required><small>AZN-jev slog: vprašanje, ki vzbudi radovednost, ali trditev s kontrastom.</small></div>
+        <div class="polje"><label for="f-uvod">Uvod</label><textarea class="serif" id="f-uvod" rows="3" placeholder="1–2 stavka, ki odpreta temo">${esc(v.uvod)}</textarea><span class="stevilo" id="st-uvod"></span></div>
+        <div class="dva">
+          ${poljeD("tema", "Rubrika", "", "", `<select id="f-tema">${S.teme.map(t => `<option value="${esc(t.id)}" ${v.tema === t.id ? "selected" : ""}>${esc(t.ime)}</option>`).join("") || `<option value="">Najprej dodajte rubriko</option>`}</select>`)}
+          ${poljeD("publika", "Publika", "", "", `<select id="f-publika">${Object.entries(PUBLIKA).map(([k, i]) => `<option value="${k}" ${v.publika === k ? "selected" : ""}>${i}</option>`).join("")}</select>`)}
+          ${poljeD("datum", "Datum objave", "", "", `<input id="f-datum" type="date" value="${esc(v.datum)}">`)}
+        </div>
+      </div></div>
+      <div class="karta"><header><h2>Besedilo</h2></header><div class="telo polja">
+        <div class="polje"><label for="f-besedilo">Celotno besedilo</label><textarea class="serif" id="f-besedilo" rows="14" placeholder="Odstavke ločite s prazno vrstico.&#10;## Medmastni naslov&#10;> Izpostavljeni citat">${esc(v.besedilo)}</textarea><small>Prazna vrstica = nov odstavek. Vrstica z »## « = medmastni naslov, z »&gt; « = izpostavljeni citat. Če besedila ni, stran pokaže ključne točke in povezavo na izvirnik.</small></div>
+        <div class="polje"><label for="f-tocke">Ključne točke</label><textarea id="f-tocke" rows="5" placeholder="Ena točka v vsaki vrstici">${esc((v.tocke || []).join("\n"))}</textarea><small>Ena točka na vrstico, 3–5 točk.</small></div>
+        <div class="polje"><label for="f-pogled">Pogled regulatorja</label><textarea id="f-pogled" rows="2" placeholder="Neobvezno: stališče AZN ali povzeto stališče EIOPA (z navedbo vira)">${esc(v.pogled)}</textarea><small>Pokaže se tudi v stolpcu »Pogled regulatorja« na naslovnici.</small></div>
+        <div class="polje"><label for="f-zavas">Kaj to pomeni za vas</label><textarea id="f-zavas" rows="3" placeholder="Neobvezno: splošni nasveti, ena vrstica = en nasvet">${esc((v.zavas || []).join("\n"))}</textarea><small>Samo splošni nasveti (»preberite pogoje«). AZN ne svetuje v posameznih primerih in ne priporoča zavarovalnic.</small></div>
+        <div class="dva" style="grid-template-columns:minmax(0,1fr) minmax(0,1fr)">
+          ${poljeD("vir", "Vir", v.vir, "Npr. »Povzetek stališča EIOPA.«")}
+          ${poljeD("url", "Povezava na izvirnik", v.url, "Celoten članek ali PDF na a-zn.si")}
+        </div>
+      </div></div>
+    </div>
+    <div class="lepljivo">
+      <div class="karta"><header><h2>Objava</h2></header><div class="telo objava-polje">
+        <p class="drobno" id="ur-info">${c?.posodobljeno ? `Shranjeno ${esc(datum(c.posodobljeno))}` : "Še ni shranjeno."}${objavaZa(id) ? ` · objavljeno ${esc(datum(objavaZa(id).objavljeno))}` : ""}</p>
+        <div class="vrstica"><button class="gumb obroba" type="button" id="b-shrani">Shrani osnutek</button><button class="gumb zlat" type="button" id="b-objavi">${objavaZa(id) ? "Posodobi objavo" : "Objavi"}</button></div>
+        ${objavaZa(id) ? `<div class="vrstica"><a class="gumb obroba majhen" href="#stran-${esc(id)}">Poglej na strani</a><button class="gumb obroba majhen" type="button" id="b-umakni">Umakni s strani</button></div>` : ""}
+        ${c ? `<div id="brisi-mesto"><button class="gumb nevaren majhen" type="button" id="b-brisi">Izbriši članek</button></div>` : ""}
+      </div></div>
+      <div class="karta"><header><h2>Fotografija</h2></header><div class="telo slika-izbor">
+        <div class="izbrana" id="ur-slika"></div>
+        <div class="galerija mala" id="ur-galerija"></div>
+        ${S.lahkoNalaga ? `<label class="gumb obroba majhen" for="ur-nalozi" style="cursor:pointer">Naloži novo fotografijo</label><input id="ur-nalozi" type="file" accept="image/png,image/jpeg,image/webp,image/gif" hidden>` : `<p class="drobno">Nove fotografije nalagajo uredniki (Editor) v razdelku Fotografije.</p>`}
+        <div class="polje"><label for="f-alt">Opis slike (alt)</label><input id="f-alt" value="${esc(v.alt)}" placeholder="Kaj je na sliki; dekorativna: »Dekorativna slika.«"></div>
+        <div class="polje"><label for="f-avtorslike">Napis pod sliko</label><input id="f-avtorslike" value="${esc(v.napisSlike)}" placeholder="Foto: Ime Priimek / Ilustracija: AZN"></div>
+      </div></div>
+    </div>
+  </form>`;
+}
+function zberiObrazec(){
+  return {
+    naslov: $("#f-naslov").value.trim(), uvod: $("#f-uvod").value.trim(), tema: $("#f-tema").value, publika: $("#f-publika").value,
+    datum: $("#f-datum").value || danes(), besedilo: $("#f-besedilo").value.trim(), tocke: vrstice($("#f-tocke").value),
+    pogled: $("#f-pogled").value.trim(), zavas: vrstice($("#f-zavas").value), vir: $("#f-vir").value.trim(), url: $("#f-url").value.trim(),
+    slika: S.izbranaSlika || "", alt: $("#f-alt").value.trim(), napisSlike: $("#f-avtorslike").value.trim()
+  };
+}
+function izrisiIzbiroSlike(){
+  const f = foto(S.izbranaSlika);
+  $("#ur-slika").innerHTML = f ? `<img src="${blob(f.asset)}" alt="">` : `<span>Ni fotografije.<br>Na strani bo motiv AZN.</span>`;
+  $("#ur-galerija").innerHTML = (S.izbranaSlika ? `<button type="button" class="izberi-foto" data-foto="" aria-pressed="false" title="Brez fotografije" style="display:grid;place-items:center;font-size:12px;color:var(--muted)">Brez</button>` : "")
+    + S.fotografije.map(f => `<button type="button" class="izberi-foto" data-foto="${esc(f.id)}" aria-pressed="${S.izbranaSlika === f.id}" title="${esc(f.opis || "Fotografija")}"><img src="${blob(f.asset)}" alt="${esc(f.opis || "")}"></button>`).join("");
+}
+function osveziStanjeUrejevalnika(){
+  const c = S.clanki.find(x => x.id === S.urejaId); if (c && $("#st-ur")) $("#st-ur").innerHTML = znacka(c);
+  if ($("#ur-galerija")) izrisiIzbiroSlike();
+}
+function vezUrejevalnik(id){
+  if (!$("#ur")) return;
+  izrisiIzbiroSlike();
+  const uvod = () => { const n = $("#f-uvod").value.length, el = $("#st-uvod"); el.textContent = n + " / 280 znakov"; el.classList.toggle("prevec", n > 280); };
+  uvod(); $("#f-uvod").addEventListener("input", uvod);
+  $("#ur").addEventListener("input", () => { S.urejevalnikUmazan = true; });
+  $("#ur-galerija").addEventListener("click", e => { const b = e.target.closest("[data-foto]"); if (!b) return; S.izbranaSlika = b.dataset.foto; S.urejevalnikUmazan = true; izrisiIzbiroSlike(); });
+  $("#ur-nalozi")?.addEventListener("change", async e => { const f = e.target.files[0]; if (!f) return; const nov = await naloziFoto(f); if (nov) { S.izbranaSlika = nov; S.urejevalnikUmazan = true; izrisiIzbiroSlike(); } e.target.value = ""; });
+  const shrani = async () => {
+    const p = zberiObrazec();
+    if (!p.naslov) { obvesti("Vpišite naslov članka."); $("#f-naslov").focus(); return null; }
+    const cid = id || novId(p.naslov);
+    const obst = S.clanki.find(x => x.id === cid);
+    const telo = { ...p, posodobljeno: zdaj(), posodobil: S.mojId || null, ustvarjeno: obst?.ustvarjeno || zdaj() };
+    const ok = await zapis(() => S.db.doc("clanki/" + cid).set(telo));
+    return ok ? { cid, telo } : null;
+  };
+  $("#b-shrani").addEventListener("click", async () => {
+    const r = await shrani(); if (!r) return;
+    S.urejevalnikUmazan = false; obvesti("Osnutek je shranjen.");
+    if (!id) location.hash = "uredi-" + r.cid; else osveziStanjeUrejevalnika();
+  });
+  $("#b-objavi").addEventListener("click", async () => {
+    const r = await shrani(); if (!r) return;
+    const t = zdaj();
+    const ok = await zapis(() => S.db.doc("objave/" + r.cid).set({ ...r.telo, posodobljeno: r.telo.posodobljeno, objavljeno: t }), "Članek je objavljen na strani.");
+    if (!ok) return;
+    S.urejevalnikUmazan = false;
+    if (!id) location.hash = "uredi-" + r.cid; else izrisi();
+  });
+  $("#b-umakni")?.addEventListener("click", async () => {
+    if (await zapis(() => S.db.doc("objave/" + id).delete(), "Članek je umaknjen s strani in ostaja kot osnutek.")) { S.urejevalnikUmazan = false; izrisi(); }
+  });
+  $("#b-brisi")?.addEventListener("click", () => {
+    $("#brisi-mesto").innerHTML = `<div class="potrdi"><p>Članek bo izbrisan iz uredništva${objavaZa(id) ? " in umaknjen s strani" : ""}. Tega ni mogoče razveljaviti.</p><div class="vrstica"><button class="gumb nevaren majhen" type="button" id="b-brisi-da">Da, izbriši</button><button class="gumb obroba majhen" type="button" id="b-brisi-ne">Prekliči</button></div></div>`;
+    $("#b-brisi-ne").addEventListener("click", () => izrisi());
+    $("#b-brisi-da").addEventListener("click", async () => {
+      if (objavaZa(id) && !(await zapis(() => S.db.doc("objave/" + id).delete()))) return;
+      if (await zapis(() => S.db.doc("clanki/" + id).delete(), "Članek je izbrisan.")) { S.urejevalnikUmazan = false; location.hash = "clanki"; }
+    });
+  });
+}
+
+/* ---------- FOTOGRAFIJE ---------- */
+async function naloziFoto(file){
+  if (!S.assets) { obvesti("Nalaganje fotografij je na voljo urednikom (Editor)."); return null; }
+  if (!/^image\/(png|jpeg|webp|gif)$/.test(file.type)) { obvesti("Podprte so slike PNG, JPG, WEBP in GIF."); return null; }
+  obvesti("Nalagam fotografijo …");
+  try {
+    const r = await S.assets.upload(file);
+    const fid = "f-" + r.id.slice(0, 12);
+    const ok = await zapis(() => S.db.doc("fotografije/" + fid).set({ asset: r.id, opis: file.name.replace(/\.[^.]+$/, ""), vir: "", ustvarjeno: zdaj(), nalozil: S.mojId || null, velikost: r.sizeBytes }), "Fotografija je naložena.");
+    return ok ? fid : null;
+  } catch (e) {
+    obvesti({ too_large: "Fotografija je prevelika (največ 20 MB).", unsupported_type: "Ta vrsta datoteke ni podprta.", quota_or_state: "Prostor za fotografije je poln.", rate_limited: "Preveč nalaganj naenkrat. Počakajte trenutek." }[e?.code] || "Nalaganje ni uspelo (" + (e?.code || "napaka") + ").");
+    return null;
+  }
+}
+function stranFotografij(){
+  return `<div class="glava-dela"><div><h1>Fotografije</h1><p>Knjižnica slik za članke. Vsaki dodajte opis in vir.</p></div></div>
+    ${S.lahkoNalaga ? `<div class="nalozi" id="spust"><b style="color:var(--ink)">Povlecite fotografije sem</b><span>ali</span><label class="gumb" for="f-nal" style="cursor:pointer">Izberi datoteke</label><input id="f-nal" type="file" accept="image/png,image/jpeg,image/webp,image/gif" multiple hidden><small>PNG, JPG, WEBP ali GIF, do 20 MB. Brez fotografij znanih oseb in logotipov tretjih brez dovoljenja.</small></div>`
+      : `<div class="opozorilo">Fotografije lahko nalagajo samo uredniki (Editor). Obstoječe lahko izberete pri urejanju članka.</div>`}
+    <div style="margin-top:18px">${S.fotografije.length ? `<div class="galerija">${S.fotografije.map(f => {
+      const rabi = S.clanki.filter(c => c.slika === f.id).length;
+      return `<div class="foto" data-id="${esc(f.id)}"><img src="${blob(f.asset)}" alt="${esc(f.opis)}"><div class="opis">
+        <label class="drobno" for="op-${esc(f.id)}">Opis</label><input id="op-${esc(f.id)}" data-polje="opis" value="${esc(f.opis)}">
+        <label class="drobno" for="vi-${esc(f.id)}">Vir / avtor</label><input id="vi-${esc(f.id)}" data-polje="vir" value="${esc(f.vir)}" placeholder="Foto: …">
+        <small>${rabi ? `V ${rabi} ${rabi === 1 ? "članku" : "člankih"}` : "Ni v uporabi"}</small>
+        <div class="vrstica"><button class="gumb obroba majhen" type="button" data-shrani>Shrani</button>${S.lahkoNalaga && !rabi ? `<button class="gumb nevaren majhen" type="button" data-brisi>Izbriši</button>` : ""}</div>
+      </div></div>`; }).join("")}</div>` : `<div class="karta"><div class="prazno"><b>Knjižnica je prazna.</b>Naložite prvo fotografijo zgoraj.</div></div>`}</div>`;
+}
+function vezFotografije(){
+  const nalozi = async files => { for (const f of files) await naloziFoto(f); };
+  $("#f-nal")?.addEventListener("change", e => { nalozi([...e.target.files]); e.target.value = ""; });
+  const sp = $("#spust");
+  if (sp) {
+    sp.addEventListener("dragover", e => { e.preventDefault(); sp.classList.add("cez"); });
+    sp.addEventListener("dragleave", () => sp.classList.remove("cez"));
+    sp.addEventListener("drop", e => { e.preventDefault(); sp.classList.remove("cez"); nalozi([...e.dataTransfer.files]); });
+  }
+  document.querySelectorAll(".foto").forEach(k => {
+    const id = k.dataset.id;
+    k.querySelector("[data-shrani]").addEventListener("click", () => zapis(() => S.db.doc("fotografije/" + id).update({ opis: k.querySelector('[data-polje="opis"]').value.trim(), vir: k.querySelector('[data-polje="vir"]').value.trim() }), "Opis fotografije je shranjen."));
+    const b = k.querySelector("[data-brisi]");
+    b?.addEventListener("click", () => {
+      if (b.dataset.potrdi) {
+        const f = foto(id);
+        (async () => { try { await S.assets.delete(f.asset); } catch (e) { obvesti("Brisanje ni uspelo (" + (e?.code || "napaka") + ")."); return; } await zapis(() => S.db.doc("fotografije/" + id).delete(), "Fotografija je izbrisana."); })();
+      } else { b.dataset.potrdi = "1"; b.textContent = "Potrdi brisanje"; }
+    });
+  });
+}
+
+/* ---------- NASLOVNICA ---------- */
+function urediNaslovnico(){
+  S.naslovnicaUmazana = false;
+  const n = S.naslovnica, o = S.objave;
+  const izb = (ime, oz, vred, pomoc, samoPogled) => `<div class="reza"><label class="oznaka" for="n-${ime}">${oz}</label><select id="n-${ime}"><option value="">Samodejno</option>${o.filter(x => !samoPogled || x.pogled).map(x => `<option value="${esc(x.id)}" ${vred === x.id ? "selected" : ""}>${esc(x.naslov)}</option>`).join("")}</select>${pomoc ? `<small class="drobno">${pomoc}</small>` : ""}</div>`;
+  return `<div class="glava-dela"><div><h1>Naslovnica</h1><p>Izberite, kateri objavljeni članki so na katerem mestu. »Samodejno« vzame najnovejše.</p></div>
+      <div class="vrstica"><a class="gumb obroba" href="#stran">Poglej javno stran</a><button class="gumb zlat" type="button" id="n-shrani">Shrani naslovnico</button></div></div>
+    ${o.length ? "" : `<div class="opozorilo">Na strani še ni objavljenih člankov. Najprej objavite članek, nato ga razporedite tukaj.</div>`}
+    <div class="karta"><div class="telo">
+      <div class="reza" style="margin-bottom:14px"><label class="oznaka" for="n-obvestilo">Obvestilo na vrhu strani</label><input id="n-obvestilo" value="${esc(n.obvestilo)}" placeholder="Neobvezno, npr. »Prijave na konferenco Zavarovanec 360 so odprte.«"></div>
+      <div class="shema">
+        <div>${izb("vodilna", "Vodilna novica (levo)", n.vodilna, "Velik naslov z uvodom.")}${izb("druga", "Pod vodilno", n.druga)}</div>
+        <div>${izb("slika", "Slika z napisom (sredina)", n.slika, "Uporabi fotografijo članka, sicer motiv AZN.")}</div>
+        <div>${izb("izbor1", "Pogled regulatorja 1", (n.izbor || [])[0], "Samo članki s pogledom regulatorja.", true)}${izb("izbor2", "Pogled regulatorja 2", (n.izbor || [])[1], "", true)}</div>
+      </div>
+      <div class="trak-sh">${[0, 1, 2].map(i => izb("trak" + i, "Trak " + (i + 1), (n.trak || [])[i])).join("")}</div>
+    </div></div>`;
+}
+function vezNaslovnico(){
+  document.querySelectorAll(".reza select, .reza input").forEach(el => el.addEventListener("input", () => S.naslovnicaUmazana = true));
+  $("#n-shrani").addEventListener("click", async () => {
+    const v = id => $("#n-" + id).value;
+    const telo = { obvestilo: $("#n-obvestilo").value.trim(), vodilna: v("vodilna"), druga: v("druga"), slika: v("slika"), izbor: [v("izbor1"), v("izbor2")], trak: [v("trak0"), v("trak1"), v("trak2")], posodobljeno: zdaj(), posodobil: S.mojId || null };
+    if (await zapis(() => S.db.doc("stran/naslovnica").set(telo), "Naslovnica je shranjena in že velja na javni strani.")) S.naslovnicaUmazana = false;
+  });
+}
+
+/* ---------- POVEZAVE IN RUBRIKE ---------- */
+function stranPovezav(){
+  const MESTA = { glava: "Glava (desno)", noga: "Noga", oba: "Glava in noga" };
+  return `<div class="glava-dela"><div><h1>Povezave in rubrike</h1><p>Rubrike tvorijo meni javne strani. Povezave so v glavi in nogi.</p></div></div>
+  <div class="karta" style="margin-bottom:18px"><header><h2>Rubrike</h2><span class="drobno">Vrstni red = vrstni red v meniju</span></header><div class="telo">
+    ${S.teme.map(t => `<div class="vrsta-pov vrsta-teme" data-tema="${esc(t.id)}"><input aria-label="Ime rubrike" data-p="ime" value="${esc(t.ime)}"><input aria-label="Opis rubrike" data-p="opis" value="${esc(t.opis)}"><input aria-label="Vrstni red" data-p="red" type="number" value="${esc(t.red ?? "")}"><div class="vrstica"><button class="gumb obroba majhen" type="button" data-shrani>Shrani</button>${S.clanki.some(c => c.tema === t.id) ? "" : `<button class="gumb nevaren majhen" type="button" data-brisi>Odstrani</button>`}</div></div>`).join("") || `<p class="drobno">Še ni rubrik.</p>`}
+    <form class="vrsta-pov vrsta-teme" id="nova-tema" novalidate><input id="nt-ime" aria-label="Ime nove rubrike" placeholder="Nova rubrika, npr. Varstvo potrošnikov"><input id="nt-opis" aria-label="Opis nove rubrike" placeholder="Kratek opis"><input id="nt-red" aria-label="Vrstni red" type="number" value="${S.teme.length + 1}"><button class="gumb majhen" type="submit">Dodaj rubriko</button></form>
+  </div></div>
+  <div class="karta"><header><h2>Povezave</h2><span class="drobno">Zunanje strani, PDF-ji, obrazci</span></header><div class="telo">
+    ${S.povezave.map(p => `<div class="vrsta-pov" data-pov="${esc(p.id)}"><input aria-label="Besedilo povezave" data-p="oznaka" value="${esc(p.oznaka)}"><input aria-label="Naslov URL" data-p="url" value="${esc(p.url)}"><select aria-label="Mesto" data-p="mesto">${Object.entries(MESTA).map(([k, i]) => `<option value="${k}" ${p.mesto === k ? "selected" : ""}>${i}</option>`).join("")}</select><div class="vrstica"><button class="gumb obroba majhen" type="button" data-shrani>Shrani</button><button class="gumb nevaren majhen" type="button" data-brisi>Odstrani</button></div></div>`).join("") || `<p class="drobno">Še ni povezav.</p>`}
+    <form class="vrsta-pov" id="nova-pov" novalidate><input id="np-oz" aria-label="Besedilo nove povezave" placeholder="Besedilo, npr. Pritožbe in pobude"><input id="np-url" aria-label="URL nove povezave" placeholder="https://www.a-zn.si/…"><select id="np-mesto" aria-label="Mesto">${Object.entries(MESTA).map(([k, i]) => `<option value="${k}">${i}</option>`).join("")}</select><button class="gumb majhen" type="submit">Dodaj povezavo</button></form>
+  </div></div>`;
+}
+const veljavenUrl = u => /^https:\/\/[^\s]+\.[^\s]+/.test(u);
+function vezPovezave(){
+  document.querySelectorAll("[data-tema]").forEach(r => {
+    const id = r.dataset.tema, g = k => r.querySelector(`[data-p="${k}"]`).value.trim();
+    r.querySelector("[data-shrani]").addEventListener("click", () => g("ime") ? zapis(() => S.db.doc("teme/" + id).set({ ime: g("ime"), opis: g("opis"), red: +g("red") || 99 }), "Rubrika je shranjena.") : obvesti("Rubrika potrebuje ime."));
+    r.querySelector("[data-brisi]")?.addEventListener("click", () => zapis(() => S.db.doc("teme/" + id).delete(), "Rubrika je odstranjena."));
+  });
+  $("#nova-tema").addEventListener("submit", e => {
+    e.preventDefault(); const ime = $("#nt-ime").value.trim(); if (!ime) return obvesti("Vpišite ime rubrike.");
+    zapis(() => S.db.doc("teme/" + slug(ime)).set({ ime, opis: $("#nt-opis").value.trim(), red: +$("#nt-red").value || 99 }), "Rubrika je dodana.");
+  });
+  document.querySelectorAll("[data-pov]").forEach(r => {
+    const id = r.dataset.pov, g = k => r.querySelector(`[data-p="${k}"]`).value.trim();
+    r.querySelector("[data-shrani]").addEventListener("click", () => veljavenUrl(g("url")) ? zapis(() => S.db.doc("povezave/" + id).update({ oznaka: g("oznaka"), url: g("url"), mesto: g("mesto") }), "Povezava je shranjena.") : obvesti("Naslov mora začeti s https://."));
+    r.querySelector("[data-brisi]").addEventListener("click", () => zapis(() => S.db.doc("povezave/" + id).delete(), "Povezava je odstranjena."));
+  });
+  $("#nova-pov").addEventListener("submit", e => {
+    e.preventDefault(); const oz = $("#np-oz").value.trim(), url = $("#np-url").value.trim();
+    if (!oz) return obvesti("Vpišite besedilo povezave."); if (!veljavenUrl(url)) return obvesti("Naslov mora začeti s https://.");
+    zapis(() => S.db.collection("povezave").doc(novId(oz)).set({ oznaka: oz, url, mesto: $("#np-mesto").value, red: S.povezave.length + 1 }), "Povezava je dodana.");
+  });
+}
+
+/* ========== JAVNA STRAN ========== */
+function izrisiJavno(p, izPodatkov){
+  document.body.classList.add("javna-stran");
+  const urednik = S.lahkoPise !== false && !S.brezDb;
+  const del = p.replace(/^stran-?/, "");
+  const O = S.objave;
+  let vsebina, aktivna = "";
+  if (S.brezDb) vsebina = `<div class="prazno" style="padding:60px 0"><b>Stran ni na voljo.</b>Novice se prikažejo, ko stran odprete prijavljeni v claude.ai.</div>`;
+  else if (!S.pripravljeno) vsebina = `<div class="prazno" style="padding:60px 0"><b>Nalagam novice …</b></div>`;
+  else if (del.startsWith("rub-") && tema(del.slice(4))) { const t = tema(del.slice(4)); aktivna = t.id; vsebina = jSeznamStran(t.ime, t.opis, O.filter(x => x.tema === t.id)); }
+  else if (del && O.find(x => x.id === del)) { const c = O.find(x => x.id === del); aktivna = c.tema; vsebina = jClanek(c); }
+  else if (del) vsebina = `<div class="prazno" style="padding:60px 0"><b>Članka ni na strani.</b><a href="#stran" style="color:var(--kicker)">Na prvo stran</a></div>`;
+  else vsebina = jPrva();
+  const pov = m => S.povezave.filter(x => x.mesto === m || x.mesto === "oba");
+  const n = S.naslovnica;
+  $("#app").innerHTML = `<div class="javna">
+    ${urednik ? `<div class="urednik-pas"><div class="wrap"><span>Predogled javne strani · vidijo jo vsi, ki jim delite povezavo</span><a href="#${del && O.find(x => x.id === del) ? "uredi-" + esc(del) : "pregled"}">← Nazaj v uredništvo</a></div></div>` : ""}
+    ${n.obvestilo ? `<div class="j-obvestilo">${esc(n.obvestilo)}</div>` : ""}
+    <header class="j-glava"><div class="wrap"><div class="vrh"><span></span>
+      <a class="logo" href="#stran" aria-label="Novice AZN, prva stran"><img class="logo-p" src="${LOGO_P}" alt="AZN – Agencija za zavarovalni nadzor" width="150" height="60"><img class="logo-n" src="${LOGO_N}" alt="AZN – Agencija za zavarovalni nadzor" width="150" height="60"><small>Novice in pojasnila</small></a>
+      <div class="desno">${pov("glava").map(x => `<a href="${esc(x.url)}" target="_blank" rel="noopener">${esc(x.oznaka)} ↗</a>`).join("")}</div></div></div>
+      <nav class="j-rub" aria-label="Rubrike"><div class="wrap"><ul><li><a href="#stran" ${!aktivna && !del ? 'aria-current="page"' : ""}>Prva stran</a></li>${S.teme.map(t => `<li><a href="#stran-rub-${esc(t.id)}" ${aktivna === t.id ? 'aria-current="page"' : ""}>${esc(t.ime)}</a></li>`).join("")}</ul></div></nav>
+    </header>
+    <main class="wrap">${vsebina}</main>
+    <footer class="j-noga"><div class="wrap"><div><img class="logo-p" src="${LOGO_P}" alt="AZN" width="95" height="38"><img class="logo-n" src="${LOGO_N}" alt="AZN" width="95" height="38"></div>
+      <p>Agencija za zavarovalni nadzor je neodvisni nadzornik zavarovalnega trga. Skrbi za zaščito zavarovalcev, zavarovancev in upravičencev in ne svetuje v posameznih primerih.</p>
+      <ul>${pov("noga").map(x => `<li><a href="${esc(x.url)}" target="_blank" rel="noopener">${esc(x.oznaka)}</a></li>`).join("")}</ul></div></footer>
+  </div>`;
+  narisiMotiv();
+  if (!izPodatkov) window.scrollTo(0, 0);
+}
+const jKicker = c => `<a class="j-kicker" href="#stran-rub-${esc(c.tema)}">${esc(imeTeme(c.tema))}</a>`;
+const jSeznam = arr => arr.length ? `<ul class="j-seznam">${arr.map(c => `<li><div>${jKicker(c)}<h3><a href="#stran-${esc(c.id)}">${esc(c.naslov)}</a></h3><p>${esc(c.uvod)}</p></div><time class="j-datum" datetime="${esc(c.datum)}">${esc(datum(c.datum))}</time></li>`).join("")}</ul>` : `<p class="prazno">V tej rubriki še ni objav.</p>`;
+const jSeznamStran = (ime, opis, arr) => `<section class="j-razdelek" style="margin-top:0"><header><h2 style="font-size:clamp(30px,4vw,46px)">${esc(ime)}</h2><p>${esc(opis)}</p></header>${jSeznam(arr)}</section>`;
+function jPrva(){
+  const O = S.objave; if (!O.length) return `<div class="prazno" style="padding:60px 0"><b>Na strani še ni objav.</b>Ko uredništvo objavi prvi članek, se pokaže tukaj.</div>`;
+  const n = S.naslovnica, po = id => id && O.find(x => x.id === id);
+  const uporab = new Set(); const vzemi = (id, pogoj = () => true) => { let c = po(id); if (!c || uporab.has(c.id)) c = O.find(x => !uporab.has(x.id) && pogoj(x)); if (c) uporab.add(c.id); return c; };
+  const A = vzemi(n.vodilna), C = vzemi(n.slika), B = vzemi(n.druga);
+  const izbor = [0, 1].map(i => { const c = po((n.izbor || [])[i]) || O.find(x => x.pogled && !(n.izbor || []).includes(x.id) && x.id !== A?.id); return c; }).filter((c, i, a) => c && a.findIndex(x => x?.id === c.id) === i);
+  const trak = [0, 1, 2].map(i => vzemi((n.trak || [])[i])).filter(Boolean);
+  const fC = C && foto(C.slika);
+  return `<div class="j-prva">
+    ${A ? `<article class="j-vod">${jKicker(A)}<h2><a href="#stran-${esc(A.id)}">${esc(A.naslov)}</a></h2><p class="j-stand">${esc(A.uvod)}</p><span class="j-chip">${esc(PUBLIKA[A.publika] || "")}</span>
+      ${B ? `<div class="druga"><h3><a href="#stran-${esc(B.id)}">${esc(B.naslov)}</a></h3><time class="j-datum" datetime="${esc(B.datum)}">${esc(datum(B.datum))}</time></div>` : ""}</article>` : "<div></div>"}
+    ${C ? `<a class="j-slika" href="#stran-${esc(C.id)}"><div class="pl">${fC ? `<img src="${blob(fC.asset)}" alt="${esc(C.alt || fC.opis || "")}">` : `<canvas id="motiv" aria-hidden="true"></canvas>`}</div><div class="napis"><span class="j-kicker">${esc(imeTeme(C.tema))}</span><h2>${esc(C.naslov)}</h2></div></a>` : "<div></div>"}
+    <section class="j-izbor" aria-label="Pogled regulatorja"><h2>Pogled regulatorja</h2>${izbor.length ? izbor.map(c => `<article><h3><a href="#stran-${esc(c.id)}">${esc(c.pogled)}</a></h3><p class="vir">${esc(c.vir || c.naslov)}</p></article>`).join("") : `<p class="j-datum">Ko članek dobi »pogled regulatorja«, se pokaže tukaj.</p>`}</section>
+  </div>
+  ${trak.length ? `<div class="j-trak">${trak.map(c => `<article>${jKicker(c)}<h3><a href="#stran-${esc(c.id)}">${esc(c.naslov)}</a></h3><time class="j-datum" datetime="${esc(c.datum)}">${esc(datum(c.datum))}</time></article>`).join("")}</div>` : ""}
+  <section class="j-razdelek"><header><h2>Vse novice</h2><p>Od najnovejše</p></header>${jSeznam(O)}</section>`;
+}
+function jBesedilo(t){
+  return String(t).split(/\n\s*\n/).map(b => b.trim()).filter(Boolean).map(b => b.startsWith("## ") ? `<h2>${esc(b.slice(3))}</h2>` : b.startsWith("> ") ? `<blockquote>${esc(b.replace(/^>\s?/gm, ""))}</blockquote>` : `<p>${esc(b).replace(/\n/g, "<br>")}</p>`).join("");
+}
+function jClanek(c){
+  const f = foto(c.slika);
+  const sorodne = S.objave.filter(x => x.id !== c.id).sort((a, b) => (b.tema === c.tema) - (a.tema === c.tema)).slice(0, 3);
+  return `<article class="j-clanek">${jKicker(c)}<h1>${esc(c.naslov)}</h1>${c.uvod ? `<p class="j-stand">${esc(c.uvod)}</p>` : ""}
+    <div class="j-podpis"><span class="j-chip">${esc(PUBLIKA[c.publika] || "")}</span><time class="j-datum" datetime="${esc(c.datum)}">${esc(datum(c.datum))}</time></div>
+    ${f ? `<figure><img src="${blob(f.asset)}" alt="${esc(c.alt || f.opis || "")}"><figcaption>${esc(c.napisSlike || f.vir || "")}</figcaption></figure>` : ""}
+    ${c.besedilo ? `<div class="j-besedilo">${jBesedilo(c.besedilo)}</div>` : ""}
+    ${c.tocke?.length ? `<h2 style="font-size:24px;margin-top:28px">Ključne točke</h2><ul class="j-tocke">${c.tocke.map(t => `<li>${esc(t)}</li>`).join("")}</ul>` : ""}
+    ${c.pogled ? `<div class="j-okvir"><span class="j-kicker">Pogled regulatorja</span><p>${esc(c.pogled)}</p></div>` : ""}
+    ${c.zavas?.length ? `<div class="j-okvir"><span class="j-kicker">Kaj to pomeni za vas</span><ul>${c.zavas.map(z => `<li>${esc(z)}</li>`).join("")}</ul></div>` : ""}
+    ${c.vir ? `<p class="j-vir">${esc(c.vir)}</p>` : ""}
+    ${c.url && veljavenUrl(c.url) ? `<p style="margin-top:18px"><a class="gumb" href="${esc(c.url)}" target="_blank" rel="noopener">${c.besedilo ? "Izvirnik na a-zn.si ↗" : "Celoten članek na a-zn.si ↗"}</a></p>` : ""}
+    ${sorodne.length ? `<section class="j-razdelek"><header><h2>Preberite še</h2></header>${jSeznam(sorodne)}</section>` : ""}
+  </article>`;
+}
+function narisiMotiv(){
+  const c = $("#motiv"); if (!c) return;
+  const r = c.getBoundingClientRect(), d = Math.min(devicePixelRatio || 1, 2);
+  if (!r.width) return;
+  c.width = r.width * d; c.height = r.height * d;
+  const x = c.getContext("2d"); x.scale(d, d); const w = r.width, h = r.height;
+  x.fillStyle = "rgba(194,163,3,.22)";
+  for (let i = 12; i < w; i += 20) for (let j = 12; j < h; j += 20) { x.beginPath(); x.arc(i, j, 1.2, 0, 6.3); x.fill(); }
+  let s = 7; const rnd = () => (s = (s * 9301 + 49297) % 233280) / 233280;
+  const t = Array.from({ length: 24 }, () => [w * (.08 + .84 * rnd()), h * (.12 + .76 * rnd()), 2 + 4 * rnd()]);
+  x.strokeStyle = "rgba(194,163,3,.5)"; x.lineWidth = 1;
+  t.forEach((a, i) => t.slice(i + 1).forEach(b => { if (Math.hypot(a[0] - b[0], a[1] - b[1]) < w * .17) { x.beginPath(); x.moveTo(a[0], a[1]); x.lineTo(b[0], b[1]); x.stroke(); } }));
+  x.fillStyle = "#C2A303"; t.forEach(([a, b, q]) => { x.beginPath(); x.arc(a, b, q, 0, 6.3); x.fill(); });
+}
+
+window.addEventListener("hashchange", () => {
+  if ((S.urejevalnikUmazan || S.naslovnicaUmazana) && !izrisi.dovoli) { /* opozorilo v obvestilu */ obvesti("Neshranjene spremembe so bile zavržene."); }
+  S.urejevalnikUmazan = false; S.naslovnicaUmazana = false; izrisi();
+});
+let zamik; addEventListener("resize", () => { clearTimeout(zamik); zamik = setTimeout(narisiMotiv, 150); });
+izrisi();
+zagon();
+</script>
