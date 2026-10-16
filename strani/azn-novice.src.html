@@ -1,0 +1,391 @@
+<title>Novice AZN</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Predloga spletne strani z novicami Agencije za zavarovalni nadzor.">
+<style>
+/* Postavitev: bela vsebinska stran z grafitnim pasom za vodilno novico (kot kavelj karusela), tanka zlata črta kot ponavljajoči se element, seznam novic z oznako teme in publike. */
+:root{
+  --bg:#FFFFFF;          /* vsebinske strani */
+  --surface:#F4F1E6;     /* topla svetla: okvirji, nasveti */
+  --ink:#1E1F21;         /* besedilo */
+  --muted:#5F5F63;       /* sekundarno besedilo (siva iz logotipa, rahlo temnejša za drobni tisk) */
+  --rule:#E3DFD2;
+  --gold:#C2A303;        /* zlata iz logotipa: črte, ikone, ploskve */
+  --gold-text:#7D6A02;   /* zlato besedilo na svetli podlagi */
+  --band:#2A2B2E;        /* grafitna: kavelj, noga */
+  --on-band:#FFFFFF;
+  --on-band-muted:#C8C8CB;
+  --dot:rgba(194,163,3,.28);
+  --f:'Trebuchet MS','Lucida Grande','Lucida Sans Unicode',Tahoma,sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#1D1E21;--surface:#27282C;--ink:#ECECED;--muted:#A8A8AD;--rule:#3A3B40;
+  --gold:#C2A303;--gold-text:#D6BA2C;--band:#121315;--on-band:#FFFFFF;--on-band-muted:#BDBDC1;--dot:rgba(194,163,3,.22);color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#1D1E21;--surface:#27282C;--ink:#ECECED;--muted:#A8A8AD;--rule:#3A3B40;
+  --gold:#C2A303;--gold-text:#D6BA2C;--band:#121315;--on-band:#FFFFFF;--on-band-muted:#BDBDC1;--dot:rgba(194,163,3,.22);color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f);font-size:16px;line-height:1.55}
+a{color:inherit}
+h1,h2,h3,p{margin:0}
+h1,h2,h3{font-weight:700;text-wrap:balance;line-height:1.2}
+:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+.wrap{max-width:1120px;margin-inline:auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+@media (min-width:760px){.wrap{padding-left:max(40px,env(safe-area-inset-left,0px));padding-right:max(40px,env(safe-area-inset-right,0px))}}
+
+.predloga{background:var(--surface);color:var(--muted);font-size:12px;text-align:center;padding-block:6px;border-bottom:1px solid var(--rule)}
+.predloga b{color:var(--gold-text);letter-spacing:.12em;text-transform:uppercase;margin-right:8px}
+
+/* glava */
+header.glava{border-bottom:1px solid var(--rule)}
+.vrh{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-block:18px}
+.logo img{display:block;height:48px;width:auto}
+.logo .neg{display:none}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .logo .poz{display:none}:root:not([data-theme="light"]) .logo .neg{display:block}}
+:root[data-theme="dark"] .logo .poz{display:none}:root[data-theme="dark"] .logo .neg{display:block}
+.vrh .desno{display:flex;align-items:center;gap:18px;font-size:13px;color:var(--muted)}
+.vrh .desno a{text-decoration:none}
+.vrh .desno a:hover{color:var(--ink)}
+.vrh .naziv{font-size:12px;letter-spacing:.1em;text-transform:uppercase}
+nav.teme{overflow-x:auto}
+nav.teme ul{list-style:none;margin:0;padding:0;display:flex;gap:4px 22px;flex-wrap:wrap;font-size:14px}
+nav.teme a{display:block;text-decoration:none;padding:12px 0 10px;border-bottom:3px solid transparent;color:var(--muted)}
+nav.teme a:hover{color:var(--ink)}
+nav.teme a[aria-current="page"]{color:var(--ink);font-weight:700;border-bottom-color:var(--gold)}
+
+/* skupno */
+.oznaka{font-size:12px;letter-spacing:.12em;text-transform:uppercase;font-weight:700;color:var(--gold-text);text-decoration:none}
+.crta{display:block;width:56px;height:4px;background:var(--gold);margin:10px 0 16px}
+.meta{display:flex;flex-wrap:wrap;align-items:center;gap:6px 12px;font-size:13px;color:var(--muted)}
+.publika{display:inline-flex;align-items:center;gap:6px;font-size:12px;border:1px solid var(--rule);padding:2px 9px;border-radius:999px;color:var(--muted)}
+.publika::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--gold)}
+.publika.strokovna::before{background:transparent;border:1.5px solid var(--gold)}
+time{font-variant-numeric:tabular-nums}
+
+/* vodilna novica */
+.kavelj{background:var(--band);color:var(--on-band);position:relative;overflow:hidden}
+.kavelj::before{content:"";position:absolute;inset:0;background-image:radial-gradient(var(--dot) 1.4px,transparent 1.6px);background-size:22px 22px;-webkit-mask-image:linear-gradient(100deg,transparent 35%,#000 85%);mask-image:linear-gradient(100deg,transparent 35%,#000 85%)}
+.kavelj svg.mreza{position:absolute;right:-40px;top:50%;transform:translateY(-50%);width:min(520px,60%);height:auto;opacity:.9}
+.kavelj .wrap{position:relative;padding-block:56px 60px}
+.kavelj .oznaka{color:var(--gold)}
+.kavelj h2{font-size:clamp(30px,4.6vw,48px);max-width:18ch;margin-bottom:16px}
+.kavelj h2 a{text-decoration:none}
+.kavelj h2 a:hover{text-decoration:underline;text-decoration-color:var(--gold);text-underline-offset:6px}
+.kavelj p.uvod{font-size:18px;color:var(--on-band-muted);max-width:54ch;margin-bottom:22px}
+.kavelj .meta{color:var(--on-band-muted)}
+.kavelj .publika{color:var(--on-band-muted);border-color:rgba(255,255,255,.25)}
+.gumb{display:inline-flex;align-items:center;gap:8px;font:700 14px/1 var(--f);text-decoration:none;background:var(--gold);color:#1E1F21;padding:12px 18px;border:0;cursor:pointer}
+.gumb:hover{filter:brightness(1.08)}
+.gumb.obroba{background:transparent;color:var(--ink);border:1px solid var(--rule)}
+.kavelj .vrstica{display:flex;flex-wrap:wrap;gap:14px 22px;align-items:center}
+
+/* seznam */
+main{padding-block:44px 64px}
+.razdelek{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:12px;border-bottom:1px solid var(--rule);padding-bottom:12px;margin-bottom:8px}
+.razdelek h2{font-size:24px}
+.filtri{display:flex;flex-wrap:wrap;gap:8px}
+.filtri button{font:13px var(--f);background:transparent;color:var(--muted);border:1px solid var(--rule);padding:6px 12px;border-radius:999px;cursor:pointer}
+.filtri button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.postavitev{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:48px;align-items:start}
+.novice{list-style:none;margin:0;padding:0}
+.novice li{display:grid;grid-template-columns:108px minmax(0,1fr);gap:20px;padding-block:22px;border-bottom:1px solid var(--rule)}
+.novice .datum{font-size:13px;color:var(--muted);padding-top:3px}
+.novice h3{font-size:21px;margin:6px 0 8px}
+.novice h3 a{text-decoration:none}
+.novice h3 a:hover{text-decoration:underline;text-decoration-color:var(--gold);text-underline-offset:4px}
+.novice p{color:var(--muted);font-size:15px;max-width:62ch;margin-bottom:10px}
+.prazno{padding-block:24px;color:var(--muted)}
+
+/* stranski stolpec */
+aside.stran{display:flex;flex-direction:column;gap:20px}
+.okvir{background:var(--surface);padding:22px 22px 24px;border-top:4px solid var(--gold)}
+.okvir h2{font-size:18px;margin-bottom:8px}
+.okvir p{font-size:14px;color:var(--muted)}
+.okvir form{display:flex;flex-direction:column;gap:10px;margin-top:14px}
+.okvir label{font-size:13px;font-weight:700}
+.okvir input{font:15px var(--f);padding:11px 12px;border:1px solid var(--rule);background:var(--bg);color:var(--ink);border-radius:0;min-width:0}
+.odziv{font-size:13px;color:var(--gold-text);min-height:1.2em}
+.okvir ul{margin:12px 0 0;padding-left:18px;font-size:14px;color:var(--muted);display:flex;flex-direction:column;gap:6px}
+.dogodek .velika{font-size:34px;font-weight:700;color:var(--gold-text);line-height:1;margin:6px 0 8px}
+
+/* članek */
+.clanek{max-width:760px}
+.clanek .nazaj{font-size:14px;color:var(--muted);text-decoration:none;display:block;width:fit-content;margin-bottom:26px}
+.clanek .nazaj:hover{color:var(--ink)}
+.clanek h1{font-size:clamp(30px,4.4vw,44px);margin-bottom:16px}
+.clanek .uvod{font-size:19px;font-weight:700;line-height:1.5;margin:22px 0 28px}
+.clanek h2{font-size:20px;margin:30px 0 12px}
+.tocke{list-style:none;margin:0;padding:0;counter-reset:t;border-top:1px solid var(--rule)}
+.tocke li{display:grid;grid-template-columns:36px minmax(0,1fr);gap:12px;padding-block:14px;border-bottom:1px solid var(--rule);counter-increment:t}
+.tocke li::before{content:counter(t);font-weight:700;color:var(--gold-text);font-variant-numeric:tabular-nums}
+.pogled{margin-top:30px;background:var(--surface);padding:22px 24px;border-left:4px solid var(--gold)}
+.pogled .oznaka{display:block;margin-bottom:8px}
+.pogled p{font-size:17px}
+.vir{font-size:13px;color:var(--muted);margin-top:24px}
+.akcije{display:flex;flex-wrap:wrap;gap:12px;margin-top:28px}
+.opozorilo{font-size:13px;color:var(--muted);background:var(--surface);padding:12px 14px;margin-top:22px}
+
+/* noga */
+footer{background:var(--band);color:var(--on-band-muted);font-size:14px}
+footer .wrap{padding-block:40px 44px;display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:32px}
+footer img{height:44px;width:auto;display:block;margin-bottom:16px}
+footer p{max-width:52ch}
+footer ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+footer a{color:var(--on-band);text-decoration:none}
+footer a:hover{text-decoration:underline;text-decoration-color:var(--gold)}
+footer .crta{margin:0 0 14px}
+
+@media (max-width:820px){
+  .postavitev{grid-template-columns:minmax(0,1fr)}
+  .novice li{grid-template-columns:minmax(0,1fr);gap:4px}
+  footer .wrap{grid-template-columns:minmax(0,1fr)}
+  .kavelj svg.mreza{opacity:.35;width:90%}
+  .vrh .naziv{display:none}
+}
+@media (prefers-reduced-motion: no-preference){.kavelj svg.mreza circle{animation:utrip 4s ease-in-out infinite}.kavelj svg.mreza circle:nth-child(odd){animation-delay:2s}}
+@keyframes utrip{50%{opacity:.45}}
+</style>
+
+<div class="predloga"><b>Predloga</b>Vzorec strani z novicami – povzetki petih objav iz AZN-jevega novičnika, celotni članki so na a-zn.si</div>
+
+<header class="glava">
+  <div class="wrap">
+    <div class="vrh">
+      <a class="logo" href="#" aria-label="AZN – Agencija za zavarovalni nadzor, na prvo stran">
+        <img class="poz" src="LOGO_POZ" alt="AZN – Agencija za zavarovalni nadzor" width="120" height="48">
+        <img class="neg" src="LOGO_NEG" alt="AZN – Agencija za zavarovalni nadzor" width="120" height="48">
+      </a>
+      <div class="desno"><span class="naziv">Novice in pojasnila</span><a href="#novicnik">Novičnik</a><a href="https://www.a-zn.si/" target="_blank" rel="noopener">a-zn.si ↗</a></div>
+    </div>
+    <nav class="teme" aria-label="Teme">
+      <ul id="meni">
+        <li><a href="#" data-pot="">Vse novice</a></li>
+        <li><a href="#dolgozivost" data-pot="dolgozivost">Dolgoživost</a></li>
+        <li><a href="#tveganja" data-pot="tveganja">Tveganja in zaščita</a></li>
+        <li><a href="#nadzor" data-pot="nadzor">Evropski nadzor</a></li>
+        <li><a href="#podatki" data-pot="podatki">Podatki in UI</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<div id="vsebina"></div>
+
+<footer>
+  <div class="wrap">
+    <div>
+      <img src="LOGO_NEG" alt="AZN – Agencija za zavarovalni nadzor" width="110" height="44">
+      <p>Agencija za zavarovalni nadzor je neodvisni nadzornik zavarovalnega trga v Sloveniji. Skrbi za zaščito zavarovalcev, zavarovancev in upravičencev. AZN ne svetuje v posameznih primerih.</p>
+    </div>
+    <div>
+      <span class="crta" aria-hidden="true"></span>
+      <ul>
+        <li><a href="https://www.a-zn.si/" target="_blank" rel="noopener">Spletna stran AZN</a></li>
+        <li><a href="#novicnik">Prijava na novičnik</a></li>
+        <li><a href="#">Vse novice</a></li>
+      </ul>
+    </div>
+  </div>
+</footer>
+
+<script>
+const TEME = {
+  dolgozivost: { ime: "Dolgoživost", opis: "Daljše življenje, pokojninska vrzel in finančna varnost v starosti." },
+  tveganja:    { ime: "Tveganja in zaščita", opis: "Kako zavarovanje omogoča velike dogodke in varuje pred izgubami." },
+  nadzor:      { ime: "Evropski nadzor", opis: "Stališča EIOPA in IAIS, konkurenčnost in finančna stabilnost." },
+  podatki:     { ime: "Podatki in UI", opis: "Digitalni nadzor, izvorni podatki in odgovorna raba umetne inteligence." }
+};
+
+/* Povzetki po objavah v AZN-jevem novičniku (junij–september 2026). Celotna besedila so na a-zn.si. */
+const NOVICE = {
+  "dolgozivost-kako-dobro": {
+    tema: "dolgozivost", publika: "strokovna", datum: "24. 9. 2026", iso: "2026-09-24",
+    naslov: "Dolgoživost: največji izziv je, kako dobro bomo živeli dlje",
+    uvod: "Zavarovalništvo se premika od financiranja posledic k preprečevanju. Kaj to pomeni za podatke, pokojnine in zavarovance?",
+    tocke: [
+      "Od zdravljenja k preventivi: zavarovalnice vse bolj podpirajo preprečevanje, ne le kritje posledic.",
+      "Več podatkov ne pomeni samodejno boljših odločitev; potrebna je odgovorna raba podatkov in umetne inteligence.",
+      "Paradoks preventive: učinek se pokaže šele po letih, zato ga je težko meriti in nagraditi.",
+      "Pokojninska vrzel ostaja: daljše življenje zahteva več prihrankov za starost."
+    ],
+    pogled: "Ravnotežje med inovacijami in varstvom zavarovancev.",
+    vir: "Na podlagi konference Geneva Association, London 2026.",
+    url: "https://www.a-zn.si/dolgozivost-najvecji-izziv-je-kako-dobro-bomo-ziveli-dlje/"
+  },
+  "ziveti-sto-let": {
+    tema: "dolgozivost", publika: "siroka", datum: "27. 8. 2026", iso: "2026-08-27",
+    naslov: "Kaj pomeni živeti sto let?",
+    uvod: "Življenjska doba se je od leta 1900 podvojila, finančna varnost ne. Mladi se tveganj zavedajo, a redko ukrepajo.",
+    tocke: [
+      "Živimo precej dlje kot pred stoletjem, prihranki in zavarovanja pa temu niso sledili.",
+      "Vrzel med dolžino življenja in finančno varnostjo je eden ključnih izzivov zavarovalništva.",
+      "Teme konference Zavarovanec 360: dolgoživost, zaščita zavarovanca, podnebna tveganja, umetna inteligenca in zaupanje."
+    ],
+    zavas: ["Razmislite, kako boste financirali daljše obdobje po upokojitvi.", "Preberite pogoje dolgoročnih zavarovanj, preden jih sklenete.", "Več informacij in pojasnil najdete na a-zn.si."],
+    vir: "Napoved konference Zavarovanec 360.",
+    url: "https://www.a-zn.si/kaj-pomeni-ziveti-sto-let/"
+  },
+  "nadzor-izvorni-podatki": {
+    tema: "podatki", publika: "strokovna", datum: "30. 7. 2026", iso: "2026-07-30",
+    naslov: "Lahko ta pristop za vedno spremeni nadzor zavarovalnic?",
+    uvod: "Nadzor na izvornih (granularnih) podatkih namesto na obrazcih obljublja manj poročanja in sprotne podatke. Prinaša pa tudi stroške in nova tveganja.",
+    tocke: [
+      "Prednosti: manj poročanja, boljša kakovost in sprotnost podatkov, skladnost z EIOPA-jevo strategijo do leta 2030.",
+      "Izzivi: stroški prehoda, kibernetska tveganja, potrebne uskladitve in velika raznolikost zavarovalnih produktov.",
+      "Zavarovalništvo je pri tem drugačno od bančništva, zato rešitev ni mogoče preprosto prenesti."
+    ],
+    pogled: "Ne »ali«, temveč koliko in kje: v prid hibridnemu modelu nadzora.",
+    vir: "Viri: IAIS, FSI, A2ii, EIOPA.",
+    url: "https://www.a-zn.si/lahko-ta-pristop-za-vedno-spremeni-nadzor-zavarovalnic/"
+  },
+  "messi-mbappe": {
+    tema: "tveganja", publika: "siroka", datum: "24. 6. 2026", iso: "2026-06-24",
+    naslov: "Kaj povezuje Messija, Mbappéja in zavarovalništvo?",
+    uvod: "Svetovno prvenstvo 2026 brez zavarovanja sploh ne bi bilo izvedljivo. Odpoved ene same tekme sproži verigo izgub.",
+    tocke: [
+      "Zavarovanje je del finančne arhitekture vsakega velikega dogodka.",
+      "Odpoved ene tekme sproži verižne izgube pri vseh, ki so z dogodkom povezani.",
+      "Zavarovalnice sodelujejo že pri načrtovanju varnosti, ne šele ob škodi."
+    ],
+    zavas: ["Pri nakupu vstopnic in potovanj preverite, kaj krije zavarovanje odpovedi.", "Preberite pogoje, preden sklenete zavarovanje."],
+    vir: "Povzetek objave v AZN-jevem novičniku.",
+    url: "https://www.a-zn.si/kaj-povezuje-messija-mbappeja-in-zavarovalnistvo/"
+  },
+  "konkurencnost-stabilnost": {
+    tema: "nadzor", publika: "strokovna", datum: "23. 6. 2026", iso: "2026-06-23",
+    naslov: "Konkurenčnost da, a ne na račun finančne stabilnosti",
+    uvod: "Ali naj nadzorniki dobijo izrecen mandat za konkurenčnost? EIOPA meni, da to ne bi rešilo pravih vzrokov težav.",
+    tocke: [
+      "Na konkurenčnost najbolj vplivajo davki, trg dela, cene energije in dostop do kapitala.",
+      "Nadzorniki konkurenčnost podpirajo posredno: s stabilnostjo, predvidljivostjo in sorazmerno regulacijo.",
+      "Zaupanje zavarovancev je ključni kapital trga."
+    ],
+    pogled: "Stališče EIOPA: zaščita potrošnikov in finančna stabilnost ostajata temelj, konkurenčnost pa iz njiju izhaja.",
+    vir: "Povzetek stališča EIOPA.",
+    url: "https://www.a-zn.si/konkurencnost-da-a-ne-na-racun-financne-stabilnosti/"
+  }
+};
+const VRSTNI_RED = Object.keys(NOVICE);
+const PUBLIKA = { siroka: "Za širšo javnost", strokovna: "Za strokovno javnost" };
+const $ = s => document.querySelector(s);
+let filter = "vse";
+
+const mreza = () => {
+  const t = [[60,70],[150,40],[230,110],[320,60],[400,140],[300,190],[180,180],[90,230],[260,260],[380,250],[460,70]];
+  const p = [[0,1],[1,2],[2,3],[3,4],[2,5],[5,6],[6,7],[5,8],[8,9],[4,9],[3,10],[4,10],[0,6]];
+  return `<svg class="mreza" viewBox="0 0 520 300" aria-hidden="true">${p.map(([a,b]) => `<line x1="${t[a][0]}" y1="${t[a][1]}" x2="${t[b][0]}" y2="${t[b][1]}" stroke="#C2A303" stroke-opacity=".45" stroke-width="1"/>`).join("")}${t.map(([x,y],i) => `<circle cx="${x}" cy="${y}" r="${i % 3 ? 3 : 5}" fill="#C2A303"/>`).join("")}</svg>`;
+};
+const oznakaTeme = n => `<a class="oznaka" href="#${n.tema}">${TEME[n.tema].ime}</a>`;
+const meta = n => `<div class="meta"><time datetime="${n.iso}">${n.datum}</time><span class="publika ${n.publika}">${PUBLIKA[n.publika]}</span></div>`;
+
+function stran(){
+  return `<aside class="stran">
+    <section class="okvir" id="novicnik">
+      <h2>Novičnik AZN</h2>
+      <p>Pojasnila o zavarovanjih, nadzoru in pravicah zavarovancev v vašem nabiralniku.</p>
+      <form id="prijava" novalidate>
+        <label for="eposta">E-pošta</label>
+        <input id="eposta" type="email" placeholder="ime@primer.si" autocomplete="email">
+        <button class="gumb" type="submit">Prijava na novičnik</button>
+        <p class="odziv" id="odziv" aria-live="polite"></p>
+      </form>
+    </section>
+    <section class="okvir dogodek">
+      <span class="oznaka">Dogodek</span>
+      <p class="velika">Zavarovanec 360</p>
+      <p>Konferenca o dolgoživosti, zaščiti zavarovanca, podnebnih tveganjih, umetni inteligenci in zaupanju.</p>
+      <ul><li>Datum: [datum]</li><li>Kraj: [kraj]</li></ul>
+    </section>
+    <section class="okvir">
+      <h2>Kaj AZN stori in česa ne</h2>
+      <ul>
+        <li>Nadzira vse zavarovalnice enako in nobene ne priporoča.</li>
+        <li>Pojasnjuje pravila in pravice zavarovancev.</li>
+        <li>Ne rešuje posameznih sporov in ne svetuje v posameznih primerih.</li>
+      </ul>
+    </section>
+  </aside>`;
+}
+
+function seznam(kljuci){
+  const vidni = kljuci.filter(k => filter === "vse" || NOVICE[k].publika === filter);
+  return vidni.length ? `<ul class="novice">${vidni.map(k => { const n = NOVICE[k]; return `<li><div class="datum"><time datetime="${n.iso}">${n.datum}</time></div><div>${oznakaTeme(n)}<h3><a href="#${k}">${n.naslov}</a></h3><p>${n.uvod}</p><span class="publika ${n.publika}">${PUBLIKA[n.publika]}</span></div></li>`; }).join("")}</ul>`
+    : `<p class="prazno">Za to izbiro ni novic. Izberite »Vse«.</p>`;
+}
+const filtri = () => `<div class="filtri" role="group" aria-label="Publika">${[["vse","Vse"],["siroka","Širša javnost"],["strokovna","Strokovna javnost"]].map(([v,i]) => `<button type="button" data-filter="${v}" aria-pressed="${filter === v}">${i}</button>`).join("")}</div>`;
+
+function naslovnica(){
+  const [prva, ...ostale] = VRSTNI_RED, n = NOVICE[prva];
+  return `<section class="kavelj">${mreza()}<div class="wrap">
+      ${oznakaTeme(n)}<span class="crta" aria-hidden="true"></span>
+      <h2><a href="#${prva}">${n.naslov}</a></h2>
+      <p class="uvod">${n.uvod}</p>
+      <div class="vrstica"><a class="gumb" href="#${prva}">Preberi povzetek</a>${meta(n)}</div>
+    </div></section>
+    <main class="wrap"><div class="postavitev"><div>
+      <div class="razdelek"><h2>Zadnje novice</h2>${filtri()}</div>
+      <div id="seznam">${seznam(ostale)}</div>
+    </div>${stran()}</div></main>`;
+}
+
+function tema(t){
+  const T = TEME[t], k = VRSTNI_RED.filter(x => NOVICE[x].tema === t);
+  return `<main class="wrap"><div class="postavitev"><div>
+    <span class="oznaka">Tema</span><span class="crta" aria-hidden="true"></span>
+    <div class="razdelek"><div><h2 style="font-size:clamp(28px,4vw,40px)">${T.ime}</h2><p style="color:var(--muted);margin-top:6px">${T.opis}</p></div>${filtri()}</div>
+    <div id="seznam">${seznam(k)}</div>
+  </div>${stran()}</div></main>`;
+}
+
+function clanek(k){
+  const n = NOVICE[k];
+  const sorodne = VRSTNI_RED.filter(x => x !== k && NOVICE[x].tema === n.tema).concat(VRSTNI_RED.filter(x => x !== k && NOVICE[x].tema !== n.tema)).slice(0, 3);
+  return `<main class="wrap"><div class="postavitev"><article class="clanek">
+    <a class="nazaj" href="#">← Vse novice</a>
+    ${oznakaTeme(n)}<span class="crta" aria-hidden="true"></span>
+    <h1>${n.naslov}</h1>
+    ${meta(n)}
+    <p class="uvod">${n.uvod}</p>
+    <h2>Ključne točke</h2>
+    <ol class="tocke">${n.tocke.map(t => `<li><span>${t}</span></li>`).join("")}</ol>
+    ${n.pogled ? `<div class="pogled"><span class="oznaka">Pogled regulatorja</span><p>${n.pogled}</p></div>` : ""}
+    ${n.zavas ? `<div class="pogled"><span class="oznaka">Kaj to pomeni za vas</span><ul style="margin:0;padding-left:18px;display:flex;flex-direction:column;gap:6px">${n.zavas.map(z => `<li>${z}</li>`).join("")}</ul></div>` : ""}
+    <p class="vir">${n.vir}</p>
+    <p class="opozorilo">To je povzetek. Celotno besedilo z viri je objavljeno na spletni strani AZN.</p>
+    <div class="akcije"><a class="gumb" href="${n.url}" target="_blank" rel="noopener">Celoten članek na a-zn.si ↗</a><button class="gumb obroba" type="button" id="kopiraj">Kopiraj povezavo</button></div>
+    <div class="razdelek" style="margin-top:44px"><h2>Preberite še</h2></div>
+    ${seznam(sorodne)}
+  </article>${stran()}</div></main>`;
+}
+
+function izrisi(ohraniPolozaj){
+  const pot = location.hash.replace(/^#/, "");
+  let html, aktivna = pot;
+  if (NOVICE[pot]) { html = clanek(pot); aktivna = NOVICE[pot].tema; document.title = NOVICE[pot].naslov + " | Novice AZN"; }
+  else if (TEME[pot]) { html = tema(pot); document.title = TEME[pot].ime + " | Novice AZN"; }
+  else { html = naslovnica(); aktivna = ""; document.title = "Novice AZN"; }
+  $("#vsebina").innerHTML = html;
+  document.querySelectorAll("#meni a").forEach(a => a.dataset.pot === aktivna ? a.setAttribute("aria-current", "page") : a.removeAttribute("aria-current"));
+  if (pot === "novicnik") $("#novicnik").scrollIntoView(); else if (!ohraniPolozaj) window.scrollTo(0, 0);
+}
+
+document.addEventListener("click", e => {
+  const f = e.target.closest("[data-filter]");
+  if (f) { filter = f.dataset.filter; izrisi(true); return; }
+  if (e.target.id === "kopiraj") {
+    const b = e.target;
+    try { navigator.clipboard.writeText(location.href).then(() => { b.textContent = "Povezava kopirana"; setTimeout(() => b.textContent = "Kopiraj povezavo", 2000); }, () => b.textContent = "Kopiranje ni uspelo"); }
+    catch { b.textContent = "Kopiranje ni uspelo"; }
+  }
+});
+document.addEventListener("submit", e => {
+  if (e.target.id !== "prijava") return;
+  e.preventDefault();
+  const v = $("#eposta").value.trim();
+  $("#odziv").textContent = /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v)
+    ? "V predlogi prijava ni povezana. Na objavljeni strani gre naslov na seznam novičnika."
+    : "Vpišite e-poštni naslov, na primer ime@primer.si.";
+});
+window.addEventListener("hashchange", () => izrisi(false));
+izrisi(false);
+</script>
